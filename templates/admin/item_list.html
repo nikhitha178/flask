@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>All Products - SmartCart</title>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f6f9;
+            margin: 0;
+        }
+
+        .navbar {
+            background: linear-gradient(90deg, #1f1f1f, #3a3a3a);
+            color: white;
+            padding: 18px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .container {
+            width: 90%;
+            margin: 30px auto;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .add-btn {
+            padding: 10px 15px;
+            background: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .add-btn:hover {
+            background: #218838;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        th,
+        td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #333;
+            color: white;
+        }
+
+        tr:hover {
+            background: #f1f1f1;
+        }
+
+        img {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+
+        .view-btn {
+            padding: 6px 10px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 13px;
+            transition: 0.3s;
+        }
+
+        .view-btn:hover {
+            background: #0056b3;
+        }
+
+        .flash {
+            text-align: center;
+            padding: 10px;
+            margin: 15px auto;
+            width: 50%;
+            border-radius: 6px;
+            background: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="navbar">
+        <h2>Product List</h2>
+    </div>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+    <div class="flash">{{ message }}</div>
+    {% endfor %}
+    {% endwith %}
+
+    <div class="container">
+
+        <div class="top-bar">
+            <a href="/admin/add-item" class="add-btn">+ Add New Product</a>
+        </div>
+
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>View</th>
+            </tr>
+
+            {% for product in products %}
+            <tr>
+                <td>{{ product.product_id }}</td>
+
+                <td>
+                    <img src="{{ url_for('static', filename='uploads/product_image/' + product.image) }}">
+                </td>
+
+                <td>{{ product.name }}</td>
+                <td>{{ product.category }}</td>
+                <td>₹{{ product.price }}</td>
+
+                <td>
+                    <a href="/admin/view-item/{{ product.product_id }}" class="view-btn">View</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+
+    </div>
+
+</body>
+
+</html>
+{% endblock %}

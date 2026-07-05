@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Your page content -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Update Product - SmartCart</title>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #eef2f7, #d9e4f5);
+            margin: 0;
+        }
+
+        .navbar {
+            background: linear-gradient(90deg, #1f1f1f, #3a3a3a);
+            color: white;
+            padding: 18px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .container {
+            width: 450px;
+            margin: 50px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: 500;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input:focus,
+        textarea:focus {
+            border-color: #00c4ff;
+            box-shadow: 0 0 5px rgba(0, 196, 255, 0.4);
+        }
+
+        textarea {
+            resize: none;
+            height: 100px;
+        }
+
+        input[type="file"] {
+            border: 1px dashed #00c4ff;
+            background: #f9f9f9;
+            cursor: pointer;
+        }
+
+        img {
+            display: block;
+            margin: 10px auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(90deg, #00c4ff, #0096ff);
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: linear-gradient(90deg, #0096ff, #007acc);
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            color: #007acc;
+        }
+
+        .flash {
+            text-align: center;
+            padding: 10px;
+            margin: 15px auto;
+            width: 450px;
+            border-radius: 6px;
+            background: #d4edda;
+            color: #155724;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="navbar">
+        <h2>Update Product</h2>
+    </div>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+    <div class="flash">{{ message }}</div>
+    {% endfor %}
+    {% endwith %}
+
+    <div class="container">
+
+        <form method="POST" action="/admin/update-item/{{ product.product_id }}" enctype="multipart/form-data">
+
+            <label>Product Name:</label><br>
+            <input type="text" name="name" value="{{ product.name }}" required><br><br>
+
+            <label>Description:</label><br>
+            <textarea name="description" required>{{ product.description }}</textarea><br><br>
+
+            <label>Category:</label><br>
+            <input type="text" name="category" value="{{ product.category }}" required><br><br>
+
+            <label>Price:</label><br>
+            <input type="number" step="0.01" name="price" value="{{ product.price }}" required><br><br>
+
+            <label>Old Image:</label><br>
+            <img src="/static/uploads/product_image/{{ product.image }}" width="120"><br><br>
+
+            <label>Choose New Image (Optional):</label><br>
+            <input type="file" name="image" accept="image/*"><br><br>
+
+            <button type="submit">Update Product</button>
+        </form>
+
+        <a href="/admin/item-list" class="back-link">← Back to Product List</a>
+
+    </div>
+
+</body>
+
+</html>
+{% endblock %}

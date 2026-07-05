@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Your page content -->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Your Cart</title>
+</head>
+
+<body>
+
+    <h2>Your Cart</h2>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+    <p style="color:red;">{{ message }}</p>
+    {% endfor %}
+    {% endwith %}
+
+    {% if not cart %}
+    <p>Your cart is empty.</p>
+    <a href="/user/products">Shop Now</a>
+    {% else %}
+
+    <!-- FORM START -->
+    <form action="/user/pay" method="POST">
+
+        <table border="1" cellpadding="10">
+            <tr>
+                <th>Select</th>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+                <th>Action</th>
+            </tr>
+
+            {% for pid, item in cart.items() %}
+            <tr>
+                <!-- ✅ Checkbox -->
+                <td>
+                    <input type="checkbox" name="selected_items" value="{{ pid }}">
+                </td>
+
+                <!-- ✅ FIX IMAGE PATH -->
+                <td>
+                    <img src="{{ url_for('static', filename='uploads/product_image/' + item.image) }}" width="80">
+                </td>
+
+                <td>{{ item.name }}</td>
+                <td>₹{{ item.price }}</td>
+
+                <td>
+                    <a href="/user/cart/decrease/{{ pid }}"> - </a>
+                    {{ item.quantity }}
+                    <a href="/user/cart/increase/{{ pid }}"> + </a>
+                </td>
+
+                <td>₹{{ item.price * item.quantity }}</td>
+
+                <td>
+                    <a href="/user/cart/remove/{{ pid }}">Remove</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <br>
+
+        <h3>Grand Total: ₹{{ grand_total }}</h3>
+
+        <!-- ✅ SELECT ALL -->
+        <input type="checkbox" onclick="toggleAll(this)"> Select All
+
+        <br><br>
+
+        <!-- ✅ PAY BUTTON -->
+        <button type="submit">Pay Now</button>
+
+    </form>
+    <!-- FORM END -->
+
+    <br>
+    <a href="/user/products">Continue Shopping</a>
+
+    <!-- ✅ JAVASCRIPT -->
+    <script>
+        function toggleAll(source) {
+            checkboxes = document.getElementsByName('selected_items');
+            for (var i = 0; i < checkboxes.length; i++) {
+                checkboxes[i].checked = source.checked;
+            }
+        }
+    </script>
+
+    {% endif %}
+
+</body>
+
+</html>
+{% endblock %}

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartCart</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: #222;
+            color: white;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar h1 {
+            margin: 0;
+            color: #00c4ff;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            background-color: #00c4ff;
+            color: black;
+        }
+
+        /* Banner */
+        .banner {
+            height: 600px;
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+                url('https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da') no-repeat center/cover;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+        }
+
+        .banner-content {
+            animation: fadeIn 1.5s ease;
+        }
+
+        .banner-content h1 {
+            font-size: 55px;
+            margin-bottom: 10px;
+        }
+
+        .banner-content p {
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+
+        .shop-btn {
+            padding: 12px 25px;
+            background: #00c4ff;
+            color: black;
+            text-decoration: none;
+            font-size: 18px;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        .shop-btn:hover {
+            background: white;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Products */
+        .products {
+            padding: 40px;
+            text-align: center;
+        }
+
+        .product-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            background: white;
+            width: 200px;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .card p {
+            color: green;
+            font-weight: bold;
+        }
+
+        .card button {
+            background: #00c4ff;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .card button:hover {
+            background: black;
+            color: white;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 15px;
+            background: #222;
+            color: white;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <h1>SmartCart</h1>
+        <div class="nav-links">
+            <!-- User -->
+            <a href="/user-register">User Signup</a>
+            <a href="/user-login">User Login</a>
+
+            <!-- Admin -->
+            <a href="/admin-login">Admin Login</a>
+            <a href="/admin-signup">Admin Signup</a>
+        </div>
+    </div>
+
+    <!-- Banner -->
+    <div class="banner">
+        <div class="banner-content">
+            <h1>Welcome to SmartCart</h1>
+            <p>Best Deals | Best Prices | Best Products</p>
+            <a href="/user-register" class="shop-btn">Shop Now</a>
+        </div>
+    </div>
+
+    <!-- Products -->
+    <div class="products">
+        <h2>Featured Products</h2>
+
+        <div class="product-container">
+
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1585386959984-a4155224a1ad">
+                <h3>Perfume</h3>
+                <p>₹1999</p>
+                <button>Buy Now</button>
+            </div>
+
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1512499617640-c2f999098c01">
+                <h3>Smart Watch</h3>
+                <p>₹2999</p>
+                <button>Buy Now</button>
+            </div>
+
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9">
+                <h3>Mobile</h3>
+                <p>₹14999</p>
+                <button>Buy Now</button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        © 2026 SmartCart | All Rights Reserved
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard - SmartCart</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial;
+            background: #f4f6f9;
+        }
+
+        .navbar {
+            background: #222;
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .navbar h2 {
+            margin: 0;
+            color: #00c4ff;
+        }
+
+        /* Dashboard Banner */
+        .dashboard {
+            height: 1100px;
+            width: 100%;
+            background: url('https://images.unsplash.com/photo-1563013544-824ae1b704d3') no-repeat center/cover;
+
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        /* Overlay */
+        .overlay {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 40px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .overlay h1 {
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            margin: 10px;
+            padding: 12px 25px;
+            background: #00c4ff;
+            color: black;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background: white;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <h2>SmartCart Admin</h2>
+        <a href="/logout" style="color:white;">Logout</a>
+    </div>
+
+    <!-- Image Dashboard -->
+    <div class="dashboard">
+        <div class="overlay">
+            <h1>Welcome Admin</h1>
+            <a href="/admin/add-item" class="btn">➕ Add Item</a>
+            <a href="/admin/item-list" class="btn">📦 View Items</a>
+        </div>
+    </div>
+
+</body>
+
+</html>
+{% endblock %}
