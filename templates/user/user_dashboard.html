@@ -1,32 +1,199 @@
-{% extends "base.html" %}
+{% extends 'base_user.html' %}
+{% block title %}User Workspace Dashboard{% endblock %}
 
 {% block content %}
-<!-- Your page content -->
+<div class="row g-4 w-100 m-0 px-0 align-items-stretch">
 
-<!DOCTYPE html>
-<html>
+    <div class="col-12 col-lg-3 col-xl-2.5 d-flex flex-column gap-3 px-0">
 
-<head>
-    <title>User Dashboard</title>
-</head>
+        <div class="card border-0 shadow-sm rounded-3 bg-white p-3">
+            <h6 class="fw-bold text-dark border-bottom pb-2 mb-3">
+                <i class="fa-solid fa-basket-shopping text-primary me-2"></i>Cart Snapshot
+            </h6>
+            <div class="d-flex align-items-center gap-3 mb-3 bg-light p-2.5 rounded-3 border">
+                <div class="bg-primary-subtle text-primary p-2.5 rounded-3 fs-5">
+                    <i class="fa-solid fa-truck-ramp-box"></i>
+                </div>
+                <div>
+                    <span class="text-muted d-block small font-medium" style="font-size: 0.75rem;">Allocations
+                        Waiting</span>
+                    <span class="fw-bold font-mono text-dark">02 Core Items</span>
+                </div>
+            </div>
+            <a href="/user/cart" class="btn btn-warning btn-sm w-100 fw-bold rounded-2 py-2">Proceed to Checkout</a>
+        </div>
 
-<body>
+        <div
+            class="card border-0 shadow-sm rounded-3 bg-white p-3 d-flex flex-row align-items-center justify-content-between">
+            <div>
+                <span class="text-muted text-uppercase fw-bold tracking-wider d-block mb-1"
+                    style="font-size: 0.7rem;">Completed Orders</span>
+                <h4 class="fw-black text-dark font-mono mb-0">14</h4>
+            </div>
+            <span class="text-success bg-success-subtle px-2.5 py-1.5 rounded-3 small fw-bold font-mono">OK</span>
+        </div>
 
-    <!-- Flash Messages -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% for category, message in messages %}
-    <p style="color:green;">{{ message }}</p>
-    {% endfor %}
-    {% endwith %}
+        <div
+            class="card border-0 shadow-sm rounded-3 bg-white p-3 d-flex flex-row align-items-center justify-content-between">
+            <div>
+                <span class="text-muted text-uppercase fw-bold tracking-wider d-block mb-1"
+                    style="font-size: 0.7rem;">Transit Parcels</span>
+                <h4 class="fw-black text-dark font-mono mb-0">01</h4>
+            </div>
+            <span class="text-warning bg-warning-subtle px-2.5 py-1.5 rounded-3 small fw-bold font-mono">LIVE</span>
+        </div>
 
-    <h2>Welcome, {{ user_name }}!</h2>
+    </div>
 
-    <a href="/user/products">Browse Products</a><br><br>
+    <div class="col-12 col-lg-9 col-xl-9.5 d-flex flex-column gap-4 px-0 px-lg-3">
 
-    <br><br>
-    <a href="/user-logout">Logout</a>
+        <div class="card border-0 rounded-4 overflow-hidden shadow-sm position-relative text-white"
+            style="min-height: 220px; background-color: #89b1ca;">
 
-</body>
+            <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1200&q=80"
+                alt="Workspace Core Node"
+                class="position-absolute top-0 start-0 w-100 h-100 object-fit-cover opacity-25 z-0">
 
-</html>
+            <div class="position-absolute top-0 start-0 w-100 h-100 z-1"
+                style="background: linear-gradient(135deg, rgba(146, 184, 217, 0.897) 0%, rgba(0, 0, 0, 0.6) 100%);"></div>
+
+            <div class="card-body p-4 p-md-5 d-flex flex-column justify-content-center h-100 position-relative z-2">
+                <h1 class="h2 fw-extrabold mb-1 tracking-tight text-white">
+                    Welcome Back, <span class="text-warning fw-black">{{ user_name }}</span>!
+                </h1>
+                <p class="opacity-90 max-w-xl small mb-3.5" style="max-width: 540px; line-height: 1.5;">
+                    Your workspace layer is securely connected to the core transaction processing node. Browse
+                    personalized catalog offerings below or complete any active shopping instances.
+                </p>
+                <div class="d-flex flex-wrap gap-2.5">
+                    <a href="/user/home" class="btn btn-warning btn-sm px-4 py-2 fw-bold rounded-2 shadow-sm">
+                        <i class="fa-solid fa-store me-1.5"></i>Launch Shop Floor Grid Catalog
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="w-100">
+            <div class="d-flex align-items-center justify-content-between border-bottom pb-2 mb-3">
+                <h5 class="fw-extrabold text-dark m-0">
+                    <i class="fa-solid fa-fire text-danger me-2"></i>Recommended Offers For You
+                </h5>
+                <span class="badge bg-white text-secondary border font-mono small">Live Feed Updates</span>
+            </div>
+
+            <div class="row g-3">
+
+                <div class="col-6 col-sm-4 col-md-3">
+                    <div
+                        class="card h-100 border-0 shadow-sm rounded-3 bg-white p-0 text-center d-flex flex-column overflow-hidden product-card-hover">
+                        <div style="height: 120px;" class="overflow-hidden bg-light">
+                            <img src="https://images.unsplash.com/photo-1496181130204-755241524eab?auto=format&fit=crop&w=400&q=80"
+                                alt="Ultra-Thin Compute Book" class="w-100 h-100 object-fit-cover">
+                        </div>
+                        <div class="p-3 d-flex flex-column justify-content-between flex-grow-1">
+                            <div>
+                                <h6 class="fw-bold text-dark small mb-1 text-truncate">Ultra-Thin Compute Book</h6>
+                                <div class="text-muted d-flex align-items-center justify-content-center gap-1 mb-2"
+                                    style="font-size: 0.75rem;">
+                                    <i class="fa-solid fa-star text-warning"></i> 4.8 <span class="opacity-50">(1.2k
+                                        sold)</span>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="fw-black text-primary font-mono mb-2" style="font-size: 0.95rem;">₹72,490.00
+                                </div>
+                                <button class="btn btn-sm btn-outline-primary w-100 fw-bold rounded-2 py-1.5">
+                                    <i class="fa-solid fa-cart-plus me-1"></i> Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-6 col-sm-4 col-md-3">
+                    <div
+                        class="card h-100 border-0 shadow-sm rounded-3 bg-white p-0 text-center d-flex flex-column overflow-hidden product-card-hover">
+                        <div style="height: 120px;" class="overflow-hidden bg-light">
+                            <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=400&q=80"
+                                alt="Quantum Cellular Device" class="w-100 h-100 object-fit-cover">
+                        </div>
+                        <div class="p-3 d-flex flex-column justify-content-between flex-grow-1">
+                            <div>
+                                <h6 class="fw-bold text-dark small mb-1 text-truncate">Quantum Cellular Device</h6>
+                                <div class="text-muted d-flex align-items-center justify-content-center gap-1 mb-2"
+                                    style="font-size: 0.75rem;">
+                                    <i class="fa-solid fa-star text-warning"></i> 4.5 <span class="opacity-50">(980
+                                        sold)</span>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="fw-black text-primary font-mono mb-2" style="font-size: 0.95rem;">₹34,999.00
+                                </div>
+                                <button class="btn btn-sm btn-outline-primary w-100 fw-bold rounded-2 py-1.5">
+                                    <i class="fa-solid fa-cart-plus me-1"></i> Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-6 col-sm-4 col-md-3">
+                    <div
+                        class="card h-100 border-0 shadow-sm rounded-3 bg-white p-0 text-center d-flex flex-column overflow-hidden product-card-hover">
+                        <div style="height: 120px;" class="overflow-hidden bg-light">
+                            <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=400&q=80"
+                                alt="Spatial ANC Headphones" class="w-100 h-100 object-fit-cover">
+                        </div>
+                        <div class="p-3 d-flex flex-column justify-content-between flex-grow-1">
+                            <div>
+                                <h6 class="fw-bold text-dark small mb-1 text-truncate">Spatial ANC Headphones</h6>
+                                <div class="text-muted d-flex align-items-center justify-content-center gap-1 mb-2"
+                                    style="font-size: 0.75rem;">
+                                    <i class="fa-solid fa-star text-warning"></i> 4.9 <span class="opacity-50">(3.4k
+                                        sold)</span>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="fw-black text-primary font-mono mb-2" style="font-size: 0.95rem;">₹14,999.00
+                                </div>
+                                <button class="btn btn-sm btn-outline-primary w-100 fw-bold rounded-2 py-1.5">
+                                    <i class="fa-solid fa-cart-plus me-1"></i> Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-6 col-sm-4 col-md-3">
+                    <div
+                        class="card h-100 border-0 shadow-sm rounded-3 bg-white p-0 text-center d-flex flex-column overflow-hidden product-card-hover">
+                        <div style="height: 120px;" class="overflow-hidden bg-light">
+                            <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=400&q=80"
+                                alt="E-Ink Slate Digital Reader" class="w-100 h-100 object-fit-cover">
+                        </div>
+                        <div class="p-3 d-flex flex-column justify-content-between flex-grow-1">
+                            <div>
+                                <h6 class="fw-bold text-dark small mb-1 text-truncate">E-Ink Slate Reader</h6>
+                                <div class="text-muted d-flex align-items-center justify-content-center gap-1 mb-2"
+                                    style="font-size: 0.75rem;">
+                                    <i class="fa-solid fa-star text-warning"></i> 4.7 <span class="opacity-50">(520
+                                        sold)</span>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="fw-black text-primary font-mono mb-2" style="font-size: 0.95rem;">₹9,999.00
+                                </div>
+                                <button class="btn btn-sm btn-outline-primary w-100 fw-bold rounded-2 py-1.5">
+                                    <i class="fa-solid fa-cart-plus me-1"></i> Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
 {% endblock %}

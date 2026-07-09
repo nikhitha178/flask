@@ -1,65 +1,14 @@
-{% extends "base.html" %}
-
-{% block title %}User Home{% endblock %}
-
+{% extends 'base_user.html' %}
+{% block title %}User Homepage Catalog Matrix Portal Landing Workspace Area{% endblock %}
 {% block content %}
-
-<div class="container mt-4">
-
-    <!-- Welcome Section -->
-    <div class="text-center mb-4">
-        <h2>Welcome to SmartCart 🛒</h2>
-        <p>Your one-stop shop for everything!</p>
+<div class="p-4 p-md-5 mb-4 rounded-3 text-black bg-gradient shadow border-0"
+    style="background: linear-gradient(135deg, #0f172a, #1e293b);">
+    <div class="col-md-8 px-0">
+        <h1 class="display-5 fw-bold">Live Inventory Stream Core</h1>
+        <p class="lead my-3 text-white-50">Filter product structures based on dynamic technical parameters or title
+            configuration values. Seamlessly clear payment tokens using our automated checking networks.</p>
+        <a href="/user/products" class="btn btn-light text-dark fw-bold px-4 py-2 mt-2">Initialize Marketplace Query
+            Filter Systems</a>
     </div>
-
-    <!-- Action Buttons -->
-    <div class="text-center mb-5">
-        <a href="/user/products" class="btn btn-primary me-2">Browse Products</a>
-        <a href="/user/cart" class="btn btn-success me-2">View Cart</a>
-        <a href="/user/orders" class="btn btn-warning">My Orders</a>
-    </div>
-
-    <!-- Featured Section -->
-    <div class="row">
-
-        <!-- Products Card -->
-        <div class="col-md-4 mb-4">
-            <div class="card shadow">
-                <img src="https://via.placeholder.com/300" class="card-img-top">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Shop Products</h5>
-                    <p class="card-text">Explore a wide range of products.</p>
-                    <a href="/user/products" class="btn btn-primary">Go</a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Cart Card -->
-        <div class="col-md-4 mb-4">
-            <div class="card shadow">
-                <img src="https://via.placeholder.com/300" class="card-img-top">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Your Cart</h5>
-                    <p class="card-text">Check items you added.</p>
-                    <a href="/user/cart" class="btn btn-success">Go</a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Orders Card -->
-        <div class="col-md-4 mb-4">
-            <div class="card shadow">
-                <img src="https://via.placeholder.com/300" class="card-img-top">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Your Orders</h5>
-                    <p class="card-text">Track your purchases.</p>
-                    <a href="/user/orders" class="btn btn-warning">Go</a>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
 </div>
-
 {% endblock %}

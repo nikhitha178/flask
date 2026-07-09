@@ -1,217 +1,211 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base_user.html' %}
+{% block title %}SmartCart | Premium Shopping Marketplace Portal{% endblock %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartCart</title>
+{% block content %}
+<div class="row w-100 m-0 px-0 mb-5">
+    <div class="col-12 p-0">
+        <div class="card border-0 rounded-4 shadow-sm position-relative text-white overflow-hidden"
+            style="min-height: 380px; background-color: #111827;">
 
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-        }
+            <img src="https://images.unsplash.com/photo-1472851294608-062f824d29cc?auto=format&fit=crop&w=1600&q=80"
+                alt="Premium Retail Experience Storefront"
+                class="position-absolute top-0 start-0 w-100 h-100 object-fit-cover opacity-40 z-0">
 
-        /* Navbar */
-        .navbar {
-            background-color: #222;
-            color: white;
-            padding: 15px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+            <div class="position-absolute top-0 start-0 w-100 h-100 z-1"
+                style="background: linear-gradient(90deg, rgba(31,41,55,0.95) 0%, rgba(31,41,55,0.4) 100%);"></div>
 
-        .navbar h1 {
-            margin: 0;
-            color: #00c4ff;
-        }
-
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            margin-left: 20px;
-            padding: 8px 15px;
-            border-radius: 5px;
-            transition: 0.3s;
-        }
-
-        .nav-links a:hover {
-            background-color: #00c4ff;
-            color: black;
-        }
-
-        /* Banner */
-        .banner {
-            height: 600px;
-            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-                url('https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da') no-repeat center/cover;
-
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            color: white;
-        }
-
-        .banner-content {
-            animation: fadeIn 1.5s ease;
-        }
-
-        .banner-content h1 {
-            font-size: 55px;
-            margin-bottom: 10px;
-        }
-
-        .banner-content p {
-            font-size: 22px;
-            margin-bottom: 20px;
-        }
-
-        .shop-btn {
-            padding: 12px 25px;
-            background: #00c4ff;
-            color: black;
-            text-decoration: none;
-            font-size: 18px;
-            border-radius: 5px;
-            transition: 0.3s;
-        }
-
-        .shop-btn:hover {
-            background: white;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(40px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Products */
-        .products {
-            padding: 40px;
-            text-align: center;
-        }
-
-        .product-container {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            flex-wrap: wrap;
-        }
-
-        .card {
-            background: white;
-            width: 200px;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .card img {
-            width: 100%;
-            height: 150px;
-            object-fit: cover;
-        }
-
-        .card p {
-            color: green;
-            font-weight: bold;
-        }
-
-        .card button {
-            background: #00c4ff;
-            border: none;
-            padding: 10px;
-            width: 100%;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-
-        .card button:hover {
-            background: black;
-            color: white;
-        }
-
-        /* Footer */
-        .footer {
-            text-align: center;
-            padding: 15px;
-            background: #222;
-            color: white;
-            margin-top: 30px;
-        }
-    </style>
-</head>
-
-<body>
-
-    <!-- Navbar -->
-    <div class="navbar">
-        <h1>SmartCart</h1>
-        <div class="nav-links">
-            <!-- User -->
-            <a href="/user-register">User Signup</a>
-            <a href="/user-login">User Login</a>
-
-            <!-- Admin -->
-            <a href="/admin-login">Admin Login</a>
-            <a href="/admin-signup">Admin Signup</a>
+            <div class="card-body p-4 p-md-5 d-flex flex-column justify-content-center h-100 position-relative z-2"
+                style="max-width: 700px; min-height: 380px;">
+                <span
+                    class="badge bg-warning text-dark fw-bold px-3 py-2 rounded-pill mb-3 text-uppercase tracking-wider align-self-start small">
+                    <i class="fa-solid fa-bolt me-1"></i> Mega Mid-Year Sale Live
+                </span>
+                <h1 class="display-5 fw-extrabold mb-3 tracking-tight text-white" style="line-height: 1.2;">
+                    Discover Premium Electronics, Fashion & Essentials
+                </h1>
+                <p class="opacity-90 mb-4 fs-6 fw-medium text-light" style="line-height: 1.6;">
+                    Join millions of registered shoppers executing secure transactional checkout sequences with live
+                    inventory pipeline updates across India.
+                </p>
+                <div class="d-flex flex-wrap gap-3">
+                    {% if session.get('user_id') %}
+                    <a href="/user/products"
+                        class="btn btn-primary btn-lg px-4 py-2.5 fs-6 fw-bold rounded-3 shadow-sm">
+                        Explore Catalog <i class="fa-solid fa-store ms-1.5"></i>
+                    </a>
+                    {% else %}
+                    <a href="/user-login"
+                        class="btn btn-white btn-lg px-4 py-2.5 fs-6 fw-bold bg-white text-primary rounded-3 shadow-sm">
+                        Start Shopping Now <i class="fa-solid fa-arrow-right ms-1.5"></i>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
         </div>
     </div>
+</div>
 
-    <!-- Banner -->
-    <div class="banner">
-        <div class="banner-content">
-            <h1>Welcome to SmartCart</h1>
-            <p>Best Deals | Best Prices | Best Products</p>
-            <a href="/user-register" class="shop-btn">Shop Now</a>
+<div class="w-100 mb-5">
+    <div class="d-flex align-items-center justify-content-between mb-4 border-bottom pb-2">
+        <h4 class="fw-extrabold text-dark m-0"><i class="fa-solid fa-laptop text-primary me-2"></i>Premium Electronics
+        </h4>
+        <a href="{% if session.get('user_id') %}/user/products{% else %}/user-login{% endif %}"
+            class="text-primary fw-bold text-decoration-none small">View All &rarr;</a>
+    </div>
+    <div class="row g-3">
+        <div class="col-6 col-md-4 col-lg-3">
+            <div class="card h-100 border-0 shadow-sm rounded-3 overflow-hidden text-center p-3 bg-white">
+                <div style="height: 140px;" class="d-flex align-items-center justify-content-center"><i
+                        class="fa-solid fa-mobile-screen-button text-muted fs-1"></i></div>
+                <h6 class="fw-bold text-dark mt-2 mb-1">Flagship Smartphone</h6>
+                <div class="text-primary fw-bold small mb-2">₹64,999.00</div>
+                <a href="{% if session.get('user_id') %}/user/products{% else %}/user-login{% endif %}"
+                    class="btn btn-sm btn-outline-primary w-100 rounded-2 fw-semibold">View Options</a>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-3">
+            <div class="card h-100 border-0 shadow-sm rounded-3 overflow-hidden text-center p-3 bg-white">
+                <div style="height: 140px;" class="d-flex align-items-center justify-content-center"><i
+                        class="fa-solid fa-headphones text-muted fs-1"></i></div>
+                <h6 class="fw-bold text-dark mt-2 mb-1">Wireless ANC Headphones</h6>
+                <div class="text-primary fw-bold small mb-2">₹14,999.00</div>
+                <a href="{% if session.get('user_id') %}/user/products{% else %}/user-login{% endif %}"
+                    class="btn btn-sm btn-outline-primary w-100 rounded-2 fw-semibold">View Options</a>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-3">
+            <div class="card h-100 border-0 shadow-sm rounded-3 overflow-hidden text-center p-3 bg-white">
+                <div style="height: 140px;" class="d-flex align-items-center justify-content-center"><i
+                        class="fa-solid fa-laptop text-muted fs-1"></i></div>
+                <h6 class="fw-bold text-dark mt-2 mb-1">Ultra-Slim Laptop M3</h6>
+                <div class="text-primary fw-bold small mb-2">₹92,490.00</div>
+                <a href="{% if session.get('user_id') %}/user/products{% else %}/user-login{% endif %}"
+                    class="btn btn-sm btn-outline-primary w-100 rounded-2 fw-semibold">View Options</a>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-3">
+            <div class="card h-100 border-0 shadow-sm rounded-3 overflow-hidden text-center p-3 bg-white">
+                <div style="height: 140px;" class="d-flex align-items-center justify-content-center"><i
+                        class="fa-solid fa-clock text-muted fs-1"></i></div>
+                <h6 class="fw-bold text-dark mt-2 mb-1">Amoled Smart Watch</h6>
+                <div class="text-primary fw-bold small mb-2">₹4,999.00</div>
+                <a href="{% if session.get('user_id') %}/user/products{% else %}/user-login{% endif %}"
+                    class="btn btn-sm btn-outline-primary w-100 rounded-2 fw-semibold">View Options</a>
+            </div>
         </div>
     </div>
+</div>
 
-    <!-- Products -->
-    <div class="products">
-        <h2>Featured Products</h2>
-
-        <div class="product-container">
-
-            <div class="card">
-                <img src="https://images.unsplash.com/photo-1585386959984-a4155224a1ad">
-                <h3>Perfume</h3>
-                <p>₹1999</p>
-                <button>Buy Now</button>
+<div class="w-100 mb-5">
+    <div class="d-flex align-items-center justify-content-between mb-4 border-bottom pb-2">
+        <h4 class="fw-extrabold text-dark m-0"><i class="fa-solid fa-shirt text-success me-2"></i>Trending Fashion &
+            Apparel</h4>
+        <a href="{% if session.get('user_id') %}/user/products{% else %}/user-login{% endif %}"
+            class="text-success fw-bold text-decoration-none small">View All &rarr;</a>
+    </div>
+    <div class="row g-3">
+        <div class="col-6 col-md-4 col-lg-3">
+            <div class="card h-100 border-0 shadow-sm rounded-3 overflow-hidden text-center p-3 bg-white">
+                <div style="height: 140px;" class="d-flex align-items-center justify-content-center"><i
+                        class="fa-solid fa-glasses text-muted fs-1"></i></div>
+                <h6 class="fw-bold text-dark mt-2 mb-1">Classic Polarized Aviators</h6>
+                <div class="text-success fw-bold small mb-2">₹2,499.00</div>
+                <a href="{% if session.get('user_id') %}/user/products{% else %}/user-login{% endif %}"
+                    class="btn btn-sm btn-outline-success w-100 rounded-2 fw-semibold">View Options</a>
             </div>
-
-            <div class="card">
-                <img src="https://images.unsplash.com/photo-1512499617640-c2f999098c01">
-                <h3>Smart Watch</h3>
-                <p>₹2999</p>
-                <button>Buy Now</button>
+        </div>
+        <div class="col-6 col-md-4 col-lg-3">
+            <div class="card h-100 border-0 shadow-sm rounded-3 overflow-hidden text-center p-3 bg-white">
+                <div style="height: 140px;" class="d-flex align-items-center justify-content-center"><i
+                        class="fa-solid fa-shoe-prints text-muted fs-1"></i></div>
+                <h6 class="fw-bold text-dark mt-2 mb-1">Premium Performance Sneakers</h6>
+                <div class="text-success fw-bold small mb-2">₹7,999.00</div>
+                <a href="{% if session.get('user_id') %}/user/products{% else %}/user-login{% endif %}"
+                    class="btn btn-sm btn-outline-success w-100 rounded-2 fw-semibold">View Options</a>
             </div>
-
-            <div class="card">
-                <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9">
-                <h3>Mobile</h3>
-                <p>₹14999</p>
-                <button>Buy Now</button>
+        </div>
+        <div class="col-6 col-md-4 col-lg-3">
+            <div class="card h-100 border-0 shadow-sm rounded-3 overflow-hidden text-center p-3 bg-white">
+                <div style="height: 140px;" class="d-flex align-items-center justify-content-center"><i
+                        class="fa-solid fa-bag-shopping text-muted fs-1"></i></div>
+                <h6 class="fw-bold text-dark mt-2 mb-1">Saffiano Leather Tote</h6>
+                <div class="text-success fw-bold small mb-2">₹12,500.00</div>
+                <a href="{% if session.get('user_id') %}/user/products{% else %}/user-login{% endif %}"
+                    class="btn btn-sm btn-outline-success w-100 rounded-2 fw-semibold">View Options</a>
             </div>
-
+        </div>
+        <div class="col-6 col-md-4 col-lg-3">
+            <div class="card h-100 border-0 shadow-sm rounded-3 overflow-hidden text-center p-3 bg-white">
+                <div style="height: 140px;" class="d-flex align-items-center justify-content-center"><i
+                        class="fa-solid fa-vest text-muted fs-1"></i></div>
+                <h6 class="fw-bold text-dark mt-2 mb-1">Waterproof Winter Jacket</h6>
+                <div class="text-success fw-bold small mb-2">₹5,499.00</div>
+                <a href="{% if session.get('user_id') %}/user/products{% else %}/user-login{% endif %}"
+                    class="btn btn-sm btn-outline-success w-100 rounded-2 fw-semibold">View Options</a>
+            </div>
         </div>
     </div>
+</div>
 
-    <!-- Footer -->
-    <div class="footer">
-        © 2026 SmartCart | All Rights Reserved
+<div class="w-100 mb-4">
+    <div class="d-flex align-items-center justify-content-between mb-4 border-bottom pb-2">
+        <h4 class="fw-extrabold text-dark m-0"><i class="fa-solid fa-sparkles text-warning me-2"></i>Fresh Store
+            Arrivals</h4>
+        <span class="text-muted small font-mono bg-light px-2 py-1 rounded border">Live Stock Feed</span>
     </div>
+    <div class="row g-3">
+        {% if products %}
+        {% for prod in products %}
+        <div class="col-6 col-md-4 col-lg-3">
+            <div class="card h-100 border-0 shadow-sm rounded-3 overflow-hidden bg-white d-flex flex-column">
 
-</body>
+                <div style="height: 160px; background-color: #f9fafb;"
+                    class="d-flex align-items-center justify-content-center overflow-hidden position-relative">
+                    {% if prod.image_url %}
+                    <img src="/static/uploads/{{ prod.image_url }}" alt="{{ prod.product_name }}"
+                        class="w-100 h-100 object-fit-cover">
+                    {% else %}
+                    <i class="fa-solid fa-box text-muted opacity-25 display-6"></i>
+                    {% endif %}
+                    <span class="position-absolute top-2 start-2 badge bg-dark text-white rounded-2 font-mono"
+                        style="font-size: 0.7rem;">
+                        {{ prod.category }}
+                    </span>
+                </div>
 
-</html>
+                <div class="card-body p-3 d-flex flex-column flex-grow-1 text-center">
+                    <h6 class="fw-bold text-dark mb-1 text-truncate w-100" title="{{ prod.product_name }}">{{
+                        prod.product_name }}</h6>
+                    <p class="text-muted small mb-2 text-truncate" style="font-size: 0.75rem;">{{ prod.description or
+                        'No added details available.' }}</p>
+
+                    <div class="mt-auto">
+                        <div class="text-dark fw-extrabold fs-6 mb-2">₹{{ "{:,.2f}".format(prod.price) }}</div>
+
+                        {% if session.get('user_id') %}
+                        <a href="/user/cart/add/{{ prod.product_id }}"
+                            class="btn btn-sm btn-primary w-100 rounded-2 fw-semibold">
+                            <i class="fa-solid fa-cart-plus me-1"></i> Add To Cart
+                        </a>
+                        {% else %}
+                        <a href="/user-login" class="btn btn-sm btn-outline-secondary w-100 rounded-2 fw-semibold">
+                            Unlock Options <i class="fa-solid fa-lock ms-1" style="font-size: 0.7rem;"></i>
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="col-12 text-center py-4">
+            <div class="p-4 rounded-3 bg-light border text-muted small">
+                <i class="fa-solid fa-boxes-open fs-3 mb-2 d-block opacity-50"></i>
+                No custom products uploaded by admins are active in the system right now.
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

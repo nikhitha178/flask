@@ -1,0 +1,89 @@
+{% extends 'base_user.html' %}
+{% block title %}System Core Infrastructure Health Matrix{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center w-100 m-0">
+    <div class="col-12 col-xl-9 px-0">
+
+        <div class="card border-0 shadow-sm rounded-4 bg-white p-4 mb-4">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="bg-success-subtle text-success p-3 rounded-3 fs-4 animate-pulse">
+                        <i class="fa-solid fa-server"></i>
+                    </div>
+                    <div>
+                        <h2 class="fw-extrabold text-dark m-0">Service Node Status</h2>
+                        <p class="text-muted small m-0">Real-time status analysis of current system clusters.</p>
+                    </div>
+                </div>
+                <span class="badge bg-success px-3 py-2 rounded-pill fw-bold d-flex align-items-center gap-2">
+                    <span class="spinner-grow spinner-grow-sm text-white" role="status"></span> All Systems Operational
+                </span>
+            </div>
+        </div>
+
+        <div class="row g-3">
+
+            <div class="col-12 col-md-6">
+                <div
+                    class="card border-0 shadow-sm rounded-3 bg-white p-3 d-flex flex-row align-items-center justify-content-between">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="text-secondary fs-4" style="width: 32px;"><i class="fa-solid fa-database"></i></div>
+                        <div>
+                            <span class="fw-bold d-block text-dark">MySQL Core Relational DB</span>
+                            <span class="text-muted small" style="font-size: 0.75rem;">Latency: 12ms</span>
+                        </div>
+                    </div>
+                    <span class="badge bg-success-subtle text-success px-2.5 py-1.5 font-mono">ONLINE</span>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6">
+                <div
+                    class="card border-0 shadow-sm rounded-3 bg-white p-3 d-flex flex-row align-items-center justify-content-between">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="text-secondary fs-4" style="width: 32px;"><i class="fa-solid fa-file-pdf"></i></div>
+                        <div>
+                            <span class="fw-bold d-block text-dark">PDF Invoice Render Engine</span>
+                            <span class="text-muted small" style="font-size: 0.75rem;">xhtml2pdf Module Layer</span>
+                        </div>
+                    </div>
+                    <span class="badge bg-success-subtle text-success px-2.5 py-1.5 font-mono">ONLINE</span>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6">
+                <div
+                    class="card border-0 shadow-sm rounded-3 bg-white p-3 d-flex flex-row align-items-center justify-content-between">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="text-secondary fs-4" style="width: 32px;"><i class="fa-solid fa-credit-card"></i>
+                        </div>
+                        <div>
+                            <span class="fw-bold d-block text-dark">Mock Transaction Gateway</span>
+                            <span class="text-muted small" style="font-size: 0.75rem;">Secure Checkout API Token</span>
+                        </div>
+                    </div>
+                    <span class="badge bg-success-subtle text-success px-2.5 py-1.5 font-mono">ONLINE</span>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6">
+                <div
+                    class="card border-0 shadow-sm rounded-3 bg-white p-3 d-flex flex-row align-items-center justify-content-between">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="text-secondary fs-4" style="width: 32px;"><i class="fa-solid fa-network-wired"></i>
+                        </div>
+                        <div>
+                            <span class="fw-bold d-block text-dark">Flask Routing Architecture</span>
+                            <span class="text-muted small" style="font-size: 0.75rem;">WSGI Matrix Gateway</span>
+                        </div>
+                    </div>
+                    <span class="badge bg-success-subtle text-success px-2.5 py-1.5 font-mono">ONLINE</span>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+{% endblock %}

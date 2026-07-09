@@ -1,96 +1,51 @@
-{% extends "base.html" %}
+{% extends 'base_admin.html' %}
+{% block title %}System Performance Real-Time Cockpit Matrix Layout Dashboard{% endblock %}
 
 {% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="h3 fw-bold mb-0 text-dark">Administrative Node Dashboard Operations Center</h2>
+    <span class="badge bg-primary px-3 py-2 rounded-2"><i class="fa-solid fa-wifi me-1.5 animate-pulse"></i>Live Engine State Data Stream</span>
+</div>
 
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <title>Admin Dashboard - SmartCart</title>
-
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial;
-            background: #f4f6f9;
-        }
-
-        .navbar {
-            background: #222;
-            color: white;
-            padding: 15px 30px;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .navbar h2 {
-            margin: 0;
-            color: #00c4ff;
-        }
-
-        /* Dashboard Banner */
-        .dashboard {
-            height: 1100px;
-            width: 100%;
-            background: url('https://images.unsplash.com/photo-1563013544-824ae1b704d3') no-repeat center/cover;
-
-
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-        }
-
-        /* Overlay */
-        .overlay {
-            background: rgba(0, 0, 0, 0.6);
-            padding: 40px;
-            border-radius: 10px;
-            text-align: center;
-        }
-
-        .overlay h1 {
-            color: white;
-            margin-bottom: 20px;
-        }
-
-        .btn {
-            display: inline-block;
-            margin: 10px;
-            padding: 12px 25px;
-            background: #00c4ff;
-            color: black;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-
-        .btn:hover {
-            background: white;
-        }
-    </style>
-</head>
-
-<body>
-
-    <!-- Navbar -->
-    <div class="navbar">
-        <h2>SmartCart Admin</h2>
-        <a href="/logout" style="color:white;">Logout</a>
-    </div>
-
-    <!-- Image Dashboard -->
-    <div class="dashboard">
-        <div class="overlay">
-            <h1>Welcome Admin</h1>
-            <a href="/admin/add-item" class="btn">➕ Add Item</a>
-            <a href="/admin/item-list" class="btn">📦 View Items</a>
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="card shadow-sm border-0 bg-white p-3 rounded-3 d-flex flex-row align-items-center justify-content-between">
+            <div>
+                <span class="text-muted text-uppercase small tracking-wider fw-semibold">Tracked Live Inventory Catalog</span>
+                <h3 class="fw-bold mb-0 text-dark mt-1">Active Core Data Tables</h3>
+            </div>
+            <div class="bg-primary-subtle text-primary p-3 rounded-3"><i class="fa-solid fa-boxes-packing fs-4"></i></div>
         </div>
     </div>
+    <div class="col-md-4">
+        <div class="card shadow-sm border-0 bg-white p-3 rounded-3 d-flex flex-row align-items-center justify-content-between">
+            <div>
+                <span class="text-muted text-uppercase small tracking-wider fw-semibold">Verified Logged Admin Authority</span>
+                <h5 class="fw-bold mb-0 text-success mt-1">{{ admin_name }}</h5>
+            </div>
+            <div class="bg-success-subtle text-success p-3 rounded-3"><i class="fa-solid fa-user-check fs-4"></i></div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card shadow-sm border-0 bg-white p-3 rounded-3 d-flex flex-row align-items-center justify-content-between">
+            <div>
+                <span class="text-muted text-uppercase small tracking-wider fw-semibold">Settlement Ledger Gateways</span>
+                <h3 class="fw-bold mb-0 text-dark mt-1">INR (₹) Standard</h3>
+            </div>
+            <div class="bg-warning-subtle text-warning p-3 rounded-3"><i class="fa-solid fa-credit-card fs-4"></i></div>
+        </div>
+    </div>
+</div>
 
-</body>
-
-</html>
+<div class="card border-0 shadow-sm rounded-3">
+    <div class="card-body p-4 text-center py-5">
+        <img src="https://illustrations.popsy.co/amber/key-security.svg" style="max-height: 180px;" class="mb-4" alt="Administrative Security Graphics Layout System">
+        <h4 class="fw-bold text-dark">Console Session Core Initialized Successfully</h4>
+        <p class="text-muted mx-auto mb-4" style="max-width: 540px;">You are currently executing root controller updates inside the data management registry grid. Maintain compliance and securely terminate operations when departing tracking stations.</p>
+        <div class="d-inline-flex gap-2">
+            <a href="/admin/item-list" class="btn btn-primary px-4"><i class="fa-solid fa-list-check me-2"></i>Access Complete Inventory Records</a>
+            <a href="/admin/add-item" class="btn btn-outline-dark px-4"><i class="fa-solid fa-plus me-2"></i>Create New Product Entry Node</a>
+        </div>
+    </div>
+</div>
 {% endblock %}

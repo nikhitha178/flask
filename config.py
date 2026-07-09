@@ -15,3 +15,4 @@ mail_password = 'zixq ytxv gqyk vryi'
 RAZORPAY_KEY_ID = "rzp_test_T8v1D1pJFQAdnN"
 RAZORPAY_KEY_SECRET = "Y1iCuIVkyIcgWi8d63Ht1sf3"
 
+

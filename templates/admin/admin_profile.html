@@ -1,54 +1,63 @@
-{% extends "base.html" %}
-
+{% extends 'base_admin.html' %}
+{% block title %}Administrator Core Profile Identity{% endblock %}
 {% block content %}
-
-<!DOCTYPE html>
-<html>
-
-<head>
-    <title>Admin Profile</title>
-</head>
-
-<body>
-
-    <h2>Admin Profile</h2>
-
-    <!-- Flash Messages -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% for category, message in messages %}
-    <p style="color:green;">{{ message }}</p>
-    {% endfor %}
-    {% endwith %}
-
-    <!-- Current Profile Image -->
-    {% if admin.profile_image %}
-    <img src="/static/uploads/admin_profiles/{{ admin.profile_image }}" width="120" height="120"
-        style="border-radius:50%;"><br><br>
-    {% else %}
-    <p>No Profile Image</p>
-    {% endif %}
-
-    <form method="POST" action="/admin/profile" enctype="multipart/form-data">
-
-        <label>Name:</label><br>
-        <input type="text" name="name" value="{{ admin.name }}" required><br><br>
-
-        <label>Email:</label><br>
-        <input type="email" name="email" value="{{ admin.email }}" required><br><br>
-
-        <label>New Password (optional):</label><br>
-        <input type="password" name="password"><br><br>
-
-        <label>Upload New Profile Image (optional):</label><br>
-        <input type="file" name="profile_image" accept="image/*"><br><br>
-
-        <button type="submit">Update Profile</button>
-    </form>
-
-    <br>
-    <a href="/admin-dashboard">Back to Dashboard</a>
-
-</body>
-
-</html>
+<div class="row">
+    <div class="col-lg-4 mb-4">
+        <div class="card shadow border-0 text-center p-4">
+            <div class="my-3">
+                {% if session.get('admin_image') %}
+                <img src="{{ url_for('static', filename='uploads/product_image/' + session.get('admin_image')) }}"
+                    class="rounded-circle img-thumbnail shadow-sm"
+                    style="width: 130px; height: 130px; object-fit: cover;">
+                {% else %}
+                <div class="bg-secondary text-white rounded-circle d-inline-flex align-items-center justify-content-center shadow-sm mb-3"
+                    style="width: 120px; height: 120px;">
+                    <i class="fa-solid fa-user-shield fs-1"></i>
+                </div>
+                {% endif %}
+                <h5 class="fw-bold text-dark mb-1">{{ session.get('admin_name') }}</h5>
+                <p class="text-muted small mb-0">{{ session.get('admin_email') }}</p>
+                <span
+                    class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 mt-2">Active
+                    Admin Supervisor</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-8">
+        <div class="card shadow border-0">
+            <div class="card-header bg-white py-3">
+                <h6 class="m-0 fw-bold text-dark"><i class="fa-solid fa-id-card-clip me-2 text-primary"></i>Modify Node
+                    Authentication Configurations</h6>
+            </div>
+            <div class="card-body p-4">
+                <form action="/admin/profile" method="POST" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label small fw-bold">Supervisor User Name</label>
+                            <input type="text" name="name" class="form-control" value="{{ session.get('admin_name') }}"
+                                required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label small fw-bold">System Email Routing Address</label>
+                            <input type="email" name="email" class="form-control"
+                                value="{{ session.get('admin_email') }}" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Update Passphrase Password <span
+                                class="text-muted fw-normal">(Leave entirely blank to maintain historical configuration
+                                settings)</span></label>
+                        <input type="password" name="password" class="form-control"
+                            placeholder="Enter alternative string layout sequence structure if desired...">
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label small fw-bold">Alternative Avatar Display Asset Upload File</label>
+                        <input type="file" name="profile_image" class="form-control" accept="image/*">
+                    </div>
+                    <button type="submit" class="btn btn-primary px-4 py-2">Commit Master Modification Sequence</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

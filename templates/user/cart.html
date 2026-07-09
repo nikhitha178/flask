@@ -1,106 +1,98 @@
-{% extends "base.html" %}
-
+{% extends 'base_user.html' %}
+{% block title %}My Electronic Shopping Cart Basket Storage{% endblock %}
 {% block content %}
-<!-- Your page content -->
+<h3 class="fw-bold text-dark mb-4"><i class="fa-solid fa-basket-shopping text-primary me-2"></i>Allocated Selection
+    Shopping Basket Checkout Ledger</h3>
 
-<!DOCTYPE html>
-<html>
+{% if cart %}
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm rounded-3 overflow-hidden">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light text-muted small text-uppercase fw-bold">
+                        <tr>
+                            <th class="ps-4" style="width: 50px;">Select</th>
+                            <th>Item Blueprint</th>
+                            <th>Price</th>
+                            <th style="width: 140px;">Quantity Scale</th>
+                            <th class="text-end pe-4">Subtotal Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for pid, item in cart.items() %}
+                        <tr>
+                            <td class="ps-4">
+                                <input type="checkbox" name="selected_items" value="{{ pid }}"
+                                    class="form-check-input select-item-trigger" checked disabled>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center gap-3">
+                                    <img src="{{ url_for('static', filename='uploads/product_image/' + item.image) }}"
+                                        class="rounded shadow-sm border"
+                                        style="width: 55px; height: 55px; object-fit: cover;">
+                                    <div>
+                                        <h6 class="fw-bold text-dark mb-0.5">{{ item.name }}</h6>
+                                        <a href="/user/cart/remove/{{ pid }}"
+                                            class="text-danger text-decoration-none small fs-7 fw-semibold"><i
+                                                class="fa-regular fa-trash-can me-1"></i>Purge Selection</a>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="text-dark font-mono">₹{{ "{:,.2f}".format(item.price) }}</td>
+                            <td>
+                                <div class="input-group input-group-sm border rounded-3 overflow-hidden"
+                                    style="max-width: 110px;">
+                                    <a href="/user/cart/decrease/{{ pid }}"
+                                        class="btn btn-light border-0 px-2.5 py-1 text-secondary"><i
+                                            class="fa-solid fa-minus fs-7"></i></a>
+                                    <span class="form-control text-center bg-white border-0 fw-bold font-mono py-1">{{
+                                        item.quantity }}</span>
+                                    <a href="/user/cart/increase/{{ pid }}"
+                                        class="btn btn-light border-0 px-2.5 py-1 text-secondary"><i
+                                            class="fa-solid fa-plus fs-7"></i></a>
+                                </div>
+                            </td>
+                            <td class="text-end fw-bold text-dark font-mono pe-4">₹{{ "{:,.2f}".format(item.price *
+                                item.quantity) }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
-<head>
-    <title>Your Cart</title>
-</head>
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm p-4 rounded-3 text-dark bg-white position-sticky" style="top: 90px;">
+            <h5 class="fw-bold border-bottom pb-2 mb-3">Order Cost Ledger Analysis</h5>
+            <div class="d-flex justify-content-between mb-2">
+                <span class="text-muted">Total Cumulative Items Basket Value</span>
+                <span class="fw-mono text-dark font-semibold">₹{{ "{:,.2f}".format(grand_total) }}</span>
+            </div>
+            <div class="form-text small text-muted mb-3">Please note: Complete your shipment allocation fields on the
+                following workspace module interface prior to triggering transaction processing engines.</div>
+            <hr>
+            <div class="d-flex justify-content-between align-items-baseline mb-4">
+                <span class="fw-bold text-dark">Estimated Checkout Total</span>
+                <span class="fs-4 fw-black text-primary font-mono">₹{{ "{:,.2f}".format(grand_total) }}</span>
+            </div>
 
-<body>
-
-    <h2>Your Cart</h2>
-
-    <!-- Flash Messages -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% for category, message in messages %}
-    <p style="color:red;">{{ message }}</p>
-    {% endfor %}
-    {% endwith %}
-
-    {% if not cart %}
-    <p>Your cart is empty.</p>
-    <a href="/user/products">Shop Now</a>
-    {% else %}
-
-    <!-- FORM START -->
-    <form action="/user/pay" method="POST">
-
-        <table border="1" cellpadding="10">
-            <tr>
-                <th>Select</th>
-                <th>Image</th>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Quantity</th>
-                <th>Total</th>
-                <th>Action</th>
-            </tr>
-
-            {% for pid, item in cart.items() %}
-            <tr>
-                <!-- ✅ Checkbox -->
-                <td>
-                    <input type="checkbox" name="selected_items" value="{{ pid }}">
-                </td>
-
-                <!-- ✅ FIX IMAGE PATH -->
-                <td>
-                    <img src="{{ url_for('static', filename='uploads/product_image/' + item.image) }}" width="80">
-                </td>
-
-                <td>{{ item.name }}</td>
-                <td>₹{{ item.price }}</td>
-
-                <td>
-                    <a href="/user/cart/decrease/{{ pid }}"> - </a>
-                    {{ item.quantity }}
-                    <a href="/user/cart/increase/{{ pid }}"> + </a>
-                </td>
-
-                <td>₹{{ item.price * item.quantity }}</td>
-
-                <td>
-                    <a href="/user/cart/remove/{{ pid }}">Remove</a>
-                </td>
-            </tr>
-            {% endfor %}
-        </table>
-
-        <br>
-
-        <h3>Grand Total: ₹{{ grand_total }}</h3>
-
-        <!-- ✅ SELECT ALL -->
-        <input type="checkbox" onclick="toggleAll(this)"> Select All
-
-        <br><br>
-
-        <!-- ✅ PAY BUTTON -->
-        <button type="submit">Pay Now</button>
-
-    </form>
-    <!-- FORM END -->
-
-    <br>
-    <a href="/user/products">Continue Shopping</a>
-
-    <!-- ✅ JAVASCRIPT -->
-    <script>
-        function toggleAll(source) {
-            checkboxes = document.getElementsByName('selected_items');
-            for (var i = 0; i < checkboxes.length; i++) {
-                checkboxes[i].checked = source.checked;
-            }
-        }
-    </script>
-
-    {% endif %}
-
-</body>
-
-</html>
+            <a href="/user/checkout"
+                class="btn btn-primary w-100 py-2.5 fw-bold rounded-3 shadow-sm text-center text-decoration-none">
+                Proceed to Checkout <i class="fa-solid fa-chevron-right small ms-1.5"></i>
+            </a>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="card border-0 shadow-sm p-5 text-center rounded-3 bg-white">
+    <img src="https://illustrations.popsy.co/amber/empty-shopping-cart.svg" style="max-height: 190px;"
+        class="mb-4 mx-auto" alt="Empty Shopping Basket Blueprint Grid Graphics">
+    <h4 class="fw-bold text-dark">Your Shopping Cart Basket Allocation Appears Wholly Devoid of Items</h4>
+    <p class="text-muted mx-auto mb-4" style="max-width: 440px;">Explore the full warehouse marketplace catalogue matrix
+        parameters to select hardware systems, appliances, or apparel configurations.</p>
+    <a href="/user/products" class="btn btn-primary px-4 py-2 fw-semibold">Browse Active Store Products Marketplace</a>
+</div>
+{% endif %}
 {% endblock %}

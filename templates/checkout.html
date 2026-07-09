@@ -1,0 +1,92 @@
+{% extends 'base_user.html' %}
+{% block title %}Checkout | Shipping Details{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row g-4">
+
+        <div class="col-12 col-lg-7">
+            <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+                <h4 class="fw-extrabold text-dark mb-3">
+                    <i class="fa-solid fa-truck text-primary me-2"></i>Shipping Destination Node
+                </h4>
+                <p class="text-muted small mb-4">Please provide a valid physical address matrix allocation where
+                    logistics units can deliver your items.</p>
+
+                <form action="/user/checkout/process" method="POST" class="needs-validation" novalidate>
+
+                    <div class="mb-3">
+                        <label for="fullName" class="form-label small fw-bold text-dark">Full Name (Recipient)</label>
+                        <input type="text" class="form-control rounded-3" id="fullName" name="full_name"
+                            placeholder="John Doe" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="phone" class="form-label small fw-bold text-dark">Contact Phone Number</label>
+                        <input type="tel" class="form-control rounded-3" id="phone" name="phone"
+                            placeholder="+91 XXXXX XXXXX" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="addressLine1" class="form-label small fw-bold text-dark">Street Address Line
+                            1</label>
+                        <input type="text" class="form-control rounded-3" id="addressLine1" name="address_1"
+                            placeholder="Flat, House no., Building, Company, Apartment" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="addressLine2" class="form-label small fw-bold text-dark">Street Address Line 2
+                            (Optional)</label>
+                        <input type="text" class="form-control rounded-3" id="addressLine2" name="address_2"
+                            placeholder="Area, Colony, Street, Sector, Village">
+                    </div>
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-12 col-sm-6">
+                            <label for="city" class="form-label small fw-bold text-dark">City</label>
+                            <input type="text" class="form-control rounded-3" id="city" name="city" required>
+                        </div>
+
+                        <div class="col-6 col-sm-3">
+                            <label for="state" class="form-label small fw-bold text-dark">State</label>
+                            <input type="text" class="form-control rounded-3" id="state" name="state" required>
+                        </div>
+
+                        <div class="col-6 col-sm-3">
+                            <label for="pinCode" class="form-label small fw-bold text-dark">PIN Code</label>
+                            <input type="text" class="form-control rounded-3" id="pinCode" name="pin_code"
+                                placeholder="400001" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 fw-bold rounded-3 py-2.5 shadow-sm">
+                        Proceed to Secure Payment Gateway <i class="fa-solid fa-arrow-right ms-2"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-5">
+            <div class="card border-0 shadow-sm rounded-4 p-4 bg-white position-sticky" style="top: 90px;">
+                <h5 class="fw-bold text-dark border-bottom pb-2 mb-3">Order Allocation Summary</h5>
+
+                <div class="d-flex justify-content-between align-items-center mb-2 small text-muted">
+                    <span>Cart Total Allocations</span>
+                    <span class="font-mono fw-semibold text-dark">₹{{ "{:,.2f}".format(total_amount) }}</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mb-3 small text-muted">
+                    <span>Logistics Delivery Fee</span>
+                    <span class="text-success font-mono fw-semibold">FREE</span>
+                </div>
+
+                <div
+                    class="d-flex justify-content-between align-items-center border-top pt-3 fs-5 fw-extrabold text-dark">
+                    <span>Total Aggregate</span>
+                    <span class="text-primary font-mono">₹{{ "{:,.2f}".format(total_amount) }}</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

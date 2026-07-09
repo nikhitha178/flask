@@ -1,4 +1,5 @@
-from flask import Flask, redirect, request, url_for, render_template, flash, session
+from flask import Flask, render_template, request, session, redirect, flash
+from flask import Flask, make_response, redirect, request, url_for, render_template, flash, session
 import mysql.connector
 import config
 import bcrypt
@@ -9,6 +10,7 @@ from flask_mail import Mail, Message
 from flask import request, jsonify, render_template
 import razorpay
 import traceback
+from utils.pdf_generator import generate_pdf
 
 razorpay_client = razorpay.Client(
     auth=(config.RAZORPAY_KEY_ID, config.RAZORPAY_KEY_SECRET)
@@ -513,15 +515,17 @@ def admin_profile_update():
     return redirect('/admin/profile')
 
 
+# ⭐ ROUTE 1: User Registration (GET + POST with OTP Verification)
+# ⭐ ROUTE 1: User Registration (GET + POST with OTP Verification)
 @app.route('/user-register', methods=['GET', 'POST'])
 def user_register():
 
     if request.method == 'GET':
+        # Combined name update to look for your target template file name
         return render_template("user/user_register.html")
 
     name = request.form['name']
     email = request.form['email']
-    password = request.form['password']
 
     # Check if user already exists
     conn = get_db_connection()
@@ -530,29 +534,96 @@ def user_register():
     cursor.execute("SELECT * FROM users WHERE email=%s", (email,))
     existing_user = cursor.fetchone()
 
+    cursor.close()
+    conn.close()
+
     if existing_user:
         flash("Email already registered! Please login.", "danger")
         return redirect('/user-register')
 
-    # Hash password
+    # 1️⃣ Save inputs temporarily in session + set role tracking flag
+    session['signup_name'] = name
+    session['signup_email'] = email
+    session['signup_role'] = 'user'  # <-- Identifies this as a user signup
+
+    # 2️⃣ Generate OTP and store it in session
+    otp = random.randint(100000, 999999)
+    session['otp'] = otp
+
+    # 3️⃣ Send OTP Email
+    message = Message(
+        subject="SmartCart User Registration OTP",
+        sender=config.mail_username,
+        recipients=[email]
+    )
+    message.body = f"Your OTP for SmartCart User Registration is: {otp}"
+    mail.send(message)
+
+    flash("OTP sent to your email!", "success")
+    return redirect('/verify-otp')
+# ⭐ ROUTE 2: User Login(GET + POST)
+# ROUTE: USER LOGIN
+
+
+# ==========================================
+# 🟢 1. UNIQUE GET ENDPOINT FOR THE FORM
+# ==========================================
+@app.route('/user-verify-otp', methods=['GET'])
+def user_verify_otp_get():
+    return render_template("admin/verify_otp.html")
+
+
+# ==========================================
+# 🟢 2. UNIQUE POST ENDPOINT FOR THE LOGIC
+# ==========================================
+@app.route('/user-verify-otp', methods=['POST'])
+def user_verify_otp_post():
+    user_otp = request.form['otp']
+    password = request.form['password']
+
+    # Comparing OTP strings safely
+    if str(session.get('otp')) != str(user_otp):
+        flash("Invalid OTP. Try again!!", "danger")
+        return redirect('/user-verify-otp')
+
+    # Hashing password using bcrypt
     hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 
-    # Insert new user
-    cursor.execute(
-        "INSERT INTO users (name, email, password) VALUES (%s, %s, %s)",
-        (name, email, hashed_password)
-    )
-    conn.commit()
+    # Check what role is currently registering (Defaults to admin if not found)
+    role = session.get('signup_role', 'admin')
 
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    if role == 'user':
+        # 👤 INSERT INTO USERS TABLE
+        cursor.execute(
+            "INSERT INTO users (name, email, password) VALUES (%s, %s, %s)",
+            (session['signup_name'], session['signup_email'], hashed_password)
+        )
+        target_redirect = '/user-login'
+        flash_msg = "User Registered Successfully!!"
+    else:
+        # 👑 INSERT INTO ADMIN TABLE
+        cursor.execute(
+            "INSERT INTO admin (name, email, password) VALUES (%s, %s, %s)",
+            (session['signup_name'], session['signup_email'], hashed_password)
+        )
+        target_redirect = '/admin-signup'
+        flash_msg = "Admin Registered Successfully!!"
+
+    conn.commit()
     cursor.close()
     conn.close()
 
-    flash("Registration successful! Please login.", "success")
-    return redirect('/user-login')
+    # Clearing temporary session workspace data
+    session.pop('otp', None)
+    session.pop('signup_name', None)
+    session.pop('signup_email', None)
+    session.pop('signup_role', None)
 
-
-# ⭐ ROUTE 2: User Login(GET + POST)
-# ROUTE: USER LOGIN
+    flash(flash_msg, "success")
+    return redirect(target_redirect)
 
 
 @app.route('/user-login', methods=['GET', 'POST'])
@@ -878,16 +949,16 @@ def verify_payment():
         flash("Please login to complete the payment.", "danger")
         return redirect('/user-login')
 
-    # Read values posted from frontend
+    # 1. Read values posted from frontend payment_gateway layout template
     razorpay_payment_id = request.form.get('razorpay_payment_id')
     razorpay_order_id = request.form.get('razorpay_order_id')
     razorpay_signature = request.form.get('razorpay_signature')
 
     if not (razorpay_payment_id and razorpay_order_id and razorpay_signature):
-        flash("Payment verification failed (missing data).", "danger")
+        flash("Payment verification failed (missing signature data).", "danger")
         return redirect('/user/cart')
 
-    # Build verification payload required by Razorpay client.utility
+    # 2. Build verification payload required by Razorpay utility module
     payload = {
         'razorpay_order_id': razorpay_order_id,
         'razorpay_payment_id': razorpay_payment_id,
@@ -895,66 +966,101 @@ def verify_payment():
     }
 
     try:
-        # This will raise an error if signature invalid
+        # Raises an explicit SignatureVerificationError if token is fraudulent
         razorpay_client.utility.verify_payment_signature(payload)
-
     except Exception as e:
-        # Verification failed
         app.logger.error("Razorpay signature verification failed: %s", str(e))
-        flash("Payment verification failed. Please contact support.", "danger")
+        flash(
+            "Payment token verification failed. Fraud protection block applied.", "danger")
         return redirect('/user/cart')
 
-    # Signature verified — now store order and items into DB
+    # 3. Signature Verified — Route data to compile Order Items matrix array
     user_id = session['user_id']
-    cart = session.get('cart', {})
+    checkout_type = session.get('checkout_type', 'cart')
+    order_items_to_save = []
+    total_amount = 0.00
 
-    if not cart:
-        flash("Cart is empty. Cannot create order.", "danger")
-        return redirect('/user/products')
+    if checkout_type == 'single' and 'buy_now_item' in session:
+        # PATHWAY A: Deconstruct individual item parameters from "Buy Now" structure block
+        single_item = session.get('buy_now_item')
+        order_items_to_save.append({
+            'product_id': single_item['product_id'],
+            'name': single_item['name'],
+            'quantity': 1,
+            'price': single_item['price']
+        })
+        total_amount = float(single_item['price'])
+    else:
+        # PATHWAY B: Multi-item structural block pull from traditional cart framework
+        cart = session.get('cart', {})
+        if not cart:
+            flash("Checkout session timeout. Your active item cart is empty.", "danger")
+            return redirect('/user/products')
 
-    # Calculate total amount (ensure same as earlier)
-    total_amount = sum(item['price'] * item['quantity']
-                       for item in cart.values())
+        for pid_str, item in cart.items():
+            order_items_to_save.append({
+                'product_id': int(pid_str),
+                'name': item['name'],
+                'quantity': item['quantity'],
+                'price': item['price']
+            })
+            total_amount += float(item['price'] * item['quantity'])
 
-    # DB insert: orders and order_items
+    # 4. Extract Shipping Address records cached during step 1 checkout process
+    address_data = session.get('temp_shipping_address', {})
+
+    # 5. Connect and execute write query transactions down to MySQL
     conn = get_db_connection()
     cursor = conn.cursor()
 
     try:
-        # Insert into orders table
-        cursor.execute("""
-            INSERT INTO orders (user_id, razorpay_order_id, razorpay_payment_id, amount, payment_status)
-            VALUES (%s, %s, %s, %s, %s)
-        """, (user_id, razorpay_order_id, razorpay_payment_id, total_amount, 'paid'))
+        # Updated Query containing direct address parameters matrix allocation
+        order_query = """
+            INSERT INTO orders (
+                user_id, razorpay_order_id, razorpay_payment_id, amount, payment_status,
+                recipient_name, phone_number, address_line_1, address_line_2, city, state, pin_code
+            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        """
+        order_values = (
+            user_id, razorpay_order_id, razorpay_payment_id, total_amount, 'paid',
+            address_data.get('name', 'N/A'),
+            address_data.get('phone', 'N/A'),
+            address_data.get('addr1', 'N/A'),
+            address_data.get('addr2', ''),
+            address_data.get('city', 'N/A'),
+            address_data.get('state', 'N/A'),
+            address_data.get('pincode', 'N/A')
+        )
 
-        order_db_id = cursor.lastrowid  # newly created order's primary key
+        cursor.execute(order_query, order_values)
+        order_db_id = cursor.lastrowid  # Auto-incremented primary key generated by MySQL
 
-        # Insert all items
-        for pid_str, item in cart.items():
-            product_id = int(pid_str)
+        # Insert items tied to this master order primary key ID
+        for item in order_items_to_save:
             cursor.execute("""
                 INSERT INTO order_items (order_id, product_id, product_name, quantity, price)
                 VALUES (%s, %s, %s, %s, %s)
-            """, (order_db_id, product_id, item['name'], item['quantity'], item['price']))
+            """, (order_db_id, item['product_id'], item['name'], item['quantity'], item['price']))
 
-        # Commit transaction
+        # Complete transactional lock commit
         conn.commit()
 
-        # Clear cart and temporary razorpay order id
+        # Clean session memory nodes completely to avoid duplicate processing loops
         session.pop('cart', None)
+        session.pop('buy_now_item', None)
+        session.pop('checkout_type', None)
+        session.pop('temp_shipping_address', None)
         session.pop('razorpay_order_id', None)
 
-        flash("Payment successful and order placed!", "success")
+        flash("Payment authorized and order entries generated successfully!", "success")
         return redirect(f"/user/order-success/{order_db_id}")
 
     except Exception as e:
-        # Rollback and log error
         conn.rollback()
-        app.logger.error("Order storage failed: %s\n%s",
-                         str(e), traceback.format_exc())
-        flash("There was an error saving your order. Contact support.", "danger")
+        app.logger.error("MySQL Engine Order Storage Failed structural breakdown: %s\n%s", str(
+            e), traceback.format_exc())
+        flash("There was a database synchronization error processing your order. Please contact support.", "danger")
         return redirect('/user/cart')
-
     finally:
         cursor.close()
         conn.close()
@@ -1004,6 +1110,178 @@ def my_orders():
     conn.close()
 
     return render_template("user/my_orders.html", orders=orders)
+
+
+@app.route("/user/download-invoice/<int:order_id>")
+def download_invoice(order_id):
+    # 1. Gatekeeper Authentication Assessment
+    if 'user_id' not in session:
+        flash("Please log in to authorize resource requests.", "danger")
+        return redirect('/user-login')
+
+    # 2. Open MySQL Database Connection Pipeline
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    # 3. Securely Fetch the Specific Order Meta Record
+    cursor.execute("SELECT * FROM orders WHERE order_id=%s AND user_id=%s",
+                   (order_id, session['user_id']))
+    order = cursor.fetchone()
+
+    if not order:
+        cursor.close()
+        conn.close()
+        flash("Target transactional ledger resource not found.", "danger")
+        return redirect('/user/my-orders')
+
+    # 4. Fetch the Associated Item Components Block
+    cursor.execute("SELECT * FROM order_items WHERE order_id=%s", (order_id,))
+    items = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    # 5. Process Content via the PDF Generator Engine
+    html = render_template("user/invoice.html", order=order, items=items)
+    pdf = generate_pdf(html)
+
+    if not pdf:
+        flash("Invoice compilation pipeline processing failure.", "danger")
+        return redirect('/user/my-orders')
+
+    # 6. Stream Binary Action Directly Back to Customer Client
+    response = make_response(pdf.getvalue())
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers[
+        'Content-Disposition'] = f"attachment; filename=SmartCart_Invoice_{order_id}.pdf"
+
+    return response
+
+
+@app.route('/privacy-policy')
+def privacy_policy():
+    # Renders the static privacy agreement document panel
+    return render_template('privacy.html')
+
+
+@app.route('/service-status')
+def service_status():
+    # In production, you could dynamically query system uptime or DB health here.
+    # For now, we will pass explicit operational status keys.
+    status_metrics = {
+        'database_node': 'OPERATIONAL',
+        'pdf_engine': 'OPERATIONAL',
+        'payment_gateway': 'OPERATIONAL',
+        'core_api': 'OPERATIONAL'
+    }
+    return render_template('node_status.html', metrics=status_metrics)
+
+
+@app.route('/user/checkout')
+def universal_checkout_gateway():
+    if 'user_id' not in session:
+        flash("Please log in to continue.", "danger")
+        return redirect('/user-login')
+
+    product_id = request.args.get('product_id')
+    total_amount = 0.00
+
+    if product_id:
+        # PATHWAY A: Buy Now processing
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        try:
+            cursor.execute(
+                "SELECT price FROM products WHERE product_id = %s", (product_id,))
+            product = cursor.fetchone()
+            if product:
+                total_amount = float(product['price'])
+                session['checkout_type'] = 'single'
+                session['checkout_product_id'] = str(product_id)
+            else:
+                flash("Product not found.", "danger")
+                return redirect('/user/products')
+        except Exception as e:
+            print("Database Error:", e)
+            return redirect('/user/products')
+        finally:
+            cursor.close()
+            conn.close()
+    else:
+        # PATHWAY B: Cart page processing
+        cart = session.get('cart', {})
+        if not cart:
+            flash("Your cart container is currently empty.", "danger")
+            return redirect('/user/products')
+
+        total_amount = sum(
+            float(item['price']) * int(item['quantity']) for item in cart.values())
+        session['checkout_type'] = 'cart'
+
+    session['checkout_total'] = total_amount
+    return render_template('checkout.html', total_amount=total_amount)
+# ====================================================================
+# 🟢 FIND OR ADD THIS ROUTE IN YOUR ROUTE SECTION BELOW YOUR CONFIGS
+
+
+@app.route('/user/checkout/process', methods=['POST'])
+def process_address_and_launch_payment():
+    if 'user_id' not in session:
+        return redirect('/user-login')
+
+    # Temporarily bundle address input strings directly into session memory structures
+    session['temp_shipping_address'] = {
+        'name': request.form.get('full_name'),
+        'phone': request.form.get('phone'),
+        'addr1': request.form.get('address_1'),
+        'addr2': request.form.get('address_2'),
+        'city': request.form.get('city'),
+        'state': request.form.get('state'),
+        'pincode': request.form.get('pin_code')
+    }
+
+    # Pull calculations from checkout routing setup
+    checkout_type = session.get('checkout_type', 'cart')
+
+    if checkout_type == 'single':
+        prod_id = session.get('checkout_product_id')
+        # Fetch individual item criteria directly from MySQL
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute(
+            "SELECT name, price FROM products WHERE product_id = %s", (prod_id,))
+        product = cursor.fetchone()
+        cursor.close()
+        conn.close()
+
+        session['buy_now_item'] = {
+            'product_id': prod_id,
+            'name': product['name'],
+            'price': float(product['price'])
+        }
+        total_amount = float(product['price'])
+    else:
+        cart = session.get('cart', {})
+        total_amount = sum(item['price'] * item['quantity']
+                           for item in cart.values())
+
+    amount_in_paise = int(total_amount * 100)
+
+    # Initialize Razorpay Order Session Registry
+    razorpay_order = razorpay_client.order.create({
+        "amount": amount_in_paise,
+        "currency": "INR",
+        "receipt": f"rcpt_user_{session['user_id']}",
+        "payment_capture": 1
+    })
+
+    return render_template(
+        'payment_gateway.html',
+        key_id=config.RAZORPAY_KEY_ID,
+        amount=total_amount,
+        amount_in_paise=amount_in_paise,
+        order_id=razorpay_order['id']
+    )
 
 
 if __name__ == '__main__':

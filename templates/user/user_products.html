@@ -1,127 +1,146 @@
-{% extends "base.html" %}
-
-{% block title %}User Home{% endblock %}
+{% extends 'base_user.html' %}
+{% block title %}Marketplace Products | SmartCart{% endblock %}
 
 {% block content %}
-<!DOCTYPE html>
-<html>
-
-<head>
-    <title>Products</title>
-    <style>
-        .product-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-
-        .product-card {
-            width: 200px;
-            border: 1px solid #ddd;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            background-color: #fff;
-            transition: 0.3s;
-        }
-
-        .product-card:hover {
-            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
-            transform: translateY(-3px);
-        }
-
-        .product-card img {
-            width: 140px;
-            height: 100px;
-            object-fit: contain;
-            margin-bottom: 10px;
-        }
-
-        .product-card h3 {
-            margin: 5px 0;
-            font-size: 18px;
-        }
-
-        .product-card p {
-            margin: 2px 0;
-            font-size: 14px;
-            color: #555;
-        }
-
-        .product-card a {
-            display: inline-block;
-            margin-top: 8px;
-            background-color: #007bff;
-            padding: 8px 12px;
-            border-radius: 5px;
-            color: white;
-            text-decoration: none;
-            font-size: 14px;
-        }
-
-        .product-card a:hover {
-            background-color: #0056b3;
-        }
-    </style>
-
-</head>
-
-<body>
-
-    <h2>All Products</h2>
-
-    <!-- Flash Messages -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% for category, message in messages %}
-    <p style="color:green;">{{ message }}</p>
-    {% endfor %}
-    {% endwith %}
-
-    <!-- Search Bar -->
-    <form method="GET" action="/user/products">
-        <input type="text" name="search" placeholder="Search product..." value="{{ request.args.get('search', '') }}">
-        <button type="submit">Search</button>
-    </form>
-
-    <br>
-
-    <!-- Category Filter -->
-    <form method="GET" action="/user/products">
-        <select name="category">
-            <option value="">All Categories</option>
-
-            {% for cat in categories %}
-            <option value="{{ cat.category }}" {% if request.args.get('category')==cat.category %} selected {% endif %}>
-                {{ cat.category }}
-            </option>
-            {% endfor %}
-        </select>
-
-        <button type="submit">Filter</button>
-    </form>
-
-    <hr>
-
-    <!-- Product Cards -->
-    <div class="product-container">
-
-        {% for product in products %}
-        <div class="product-card">
-
-            <img src="/static/uploads/product_image/{{ product.image }}">
-
-            <h3>{{ product.name }}</h3>
-            <p>{{ product.category }}</p>
-            <p><strong>₹{{ product.price }}</strong></p>
-
-            <a href="/user/product/{{ product.product_id }}">View Details</a>
+<div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1100;">
+    <div id="cartToast" class="toast align-items-center text-white bg-success border-0 shadow" role="alert"
+        aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+                <i class="fa-solid fa-circle-check me-2"></i> Item successfully allocated to your active cart container!
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-toast="close"
+                data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
-        {% endfor %}
-
     </div>
+</div>
 
-</body>
+<div class="card border-0 shadow-sm p-3 rounded-3 mb-4 bg-white">
+    <form action="/user/products" method="GET" class="row g-2 align-items-center">
+        <div class="col-md-5">
+            <div class="input-group input-group-sm">
+                <span class="input-group-text bg-white border-end-0 text-muted">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </span>
+                <input type="text" name="search" class="form-control border-start-0 text-sm"
+                    placeholder="Search product names..." value="{{ request.args.get('search','') }}">
+            </div>
+        </div>
+        <div class="col-md-4">
+            <select name="category" class="form-select form-select-sm text-sm">
+                <option value="">All Market Vertical Categories</option>
+                {% for cat in categories %}
+                <option value="{{ cat.category }}" {% if request.args.get('category')==cat.category %}selected{% endif
+                    %}>
+                    {{ cat.category }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-sm btn-primary w-100 fw-semibold">
+                <i class="fa-solid fa-sliders me-1.5"></i>Execute Grid Filter Updates
+            </button>
+        </div>
+    </form>
+</div>
 
-</html>
+<div class="row g-3">
+    {% for item in products %}
+    <div class="col-sm-6 col-md-4 col-lg-3">
+        <div
+            class="card h-100 border-0 shadow-sm rounded-3 overflow-hidden bg-white d-flex flex-column product-card-hover">
+
+            <div class="position-relative bg-white text-center p-3 border-bottom"
+                style="height: 190px; display: flex; align-items: center; justify-content: center;">
+                <img src="{{ url_for('static', filename='uploads/product_image/' + item.image) }}"
+                    style="max-height: 100%; max-width: 100%; object-fit: contain;" alt="{{ item.name }}">
+            </div>
+
+            <div class="card-body p-3 d-flex flex-column justify-content-between flex-grow-1">
+                <div>
+                    <span class="text-uppercase tracking-wider text-muted fs-7 fw-bold d-block mb-1">
+                        {{ item.category }}
+                    </span>
+                    <h6 class="fw-bold text-dark mb-2 text-truncate-2"
+                        style="height: 42px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;"
+                        title="{{ item.name }}">
+                        {{ item.name }}
+                    </h6>
+                </div>
+
+                <div class="pt-2 mt-auto">
+                    <div class="fs-5 fw-black text-dark font-mono mb-3">
+                        ₹{{ "{:,.2f}".format(item.price) }}
+                    </div>
+
+                    <div class="d-flex flex-column gap-2">
+                        <div class="btn-group w-100">
+                            <a href="/user/product/{{ item.product_id }}" class="btn btn-sm btn-outline-secondary w-25"
+                                title="Product Info">
+                                <i class="fa-solid fa-info-circle"></i>
+                            </a>
+                            <button type="button" class="btn btn-sm btn-outline-primary w-75 ajax-add-to-cart"
+                                data-product-id="{{ item.product_id }}">
+                                <i class="fa-solid fa-cart-plus me-1"></i> Add to Cart
+                            </button>
+                        </div>
+
+                        <a href="/user/checkout?product_id={{ item.product_id }}" class="btn btn-primary">
+                            Buy Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-12">
+        <div class="card border-0 shadow-sm p-5 text-center bg-white rounded-3">
+            <i class="fa-solid fa-store-slash fs-2 text-black-50 mb-2.5 d-block"></i>
+            <h5 class="fw-bold text-dark mb-1">No Public Storefront Inventory Listings Accessible</h5>
+            <p class="text-muted small m-0">Try adjusting your filters or search keywords above.</p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const toastElement = document.getElementById('cartToast');
+        const bootstrapToast = new bootstrap.Toast(toastElement);
+
+        document.querySelectorAll('.ajax-add-to-cart').forEach(button => {
+            button.addEventListener('click', function (e) {
+                e.preventDefault();
+                const productId = this.getAttribute('data-product-id');
+
+                // Prevent simultaneous multi-click anomalies
+                this.disabled = true;
+                const originalContent = this.innerHTML;
+                this.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
+
+                // Dispatch micro-task payload packet directly to the background handler
+                fetch(`/user/add-to-cart/${productId}`, {
+                    method: 'GET',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                    .then(response => {
+                        this.disabled = false;
+                        this.innerHTML = originalContent;
+
+                        // Fire floating window notifications layout element
+                        bootstrapToast.show();
+                    })
+                    .catch(error => {
+                        console.error('Error executing checkout stream payload:', error);
+                        this.disabled = false;
+                        this.innerHTML = originalContent;
+                    });
+            });
+        });
+    });
+</script>
 {% endblock %}

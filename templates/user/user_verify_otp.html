@@ -4,13 +4,23 @@
 {% block content %}
 <div class="row justify-content-center align-items-center w-100 m-0 py-5">
     <div class="col-12 col-md-6 col-lg-5 px-0">
-        <div class="card border-0 shadow-sm rounded-4 bg-white p-4 p-md-5">
+
+        <div
+            class="card border-0 shadow-sm rounded-4 bg-white p-4 p-md-5 {% if session.get('signup_role') == 'admin' %}border-top border-warning border-3{% else %}border-top border-primary border-3{% endif %}">
 
             <div class="text-center mb-4">
-                <div class="bg-primary-subtle text-primary d-inline-flex p-3 rounded-circle fs-3 mb-3">
-                    <i class="fa-solid fa-shield-audit"></i>
+                {% if session.get('signup_role') == 'admin' %}
+                <div class="bg-warning-subtle text-warning d-inline-flex p-3 rounded-circle fs-3 mb-3">
+                    <i class="fa-solid fa-user-shield"></i>
                 </div>
-                <h3 class="fw-extrabold text-dark m-0">Validate Code</h3>
+                <h3 class="fw-extrabold text-dark m-0">Admin Verification</h3>
+                {% else %}
+                <div class="bg-primary-subtle text-primary d-inline-flex p-3 rounded-circle fs-3 mb-3">
+                    <i class="fa-solid fa-user-check"></i>
+                </div>
+                <h3 class="fw-extrabold text-dark m-0">User Verification</h3>
+                {% endif %}
+
                 <p class="text-muted small mt-1">
                     We sent a 6-digit confirmation pin to <strong>{{ session.get('signup_email', 'your email')
                         }}</strong>.
@@ -27,7 +37,7 @@
             {% endif %}
             {% endwith %}
 
-            <form action="/verify-otp" method="POST" autocomplete="off">
+            <form action="/user-verify-otp" method="POST" autocomplete="off">
                 <div class="mb-3">
                     <label for="otp" class="form-label font-semibold small text-secondary">6-Digit OTP Token</label>
                     <div class="input-group">
@@ -53,10 +63,17 @@
                     </div>
                 </div>
 
+                {% if session.get('signup_role') == 'admin' %}
+                <button type="submit"
+                    class="btn btn-warning text-dark w-100 py-2.5 fw-extrabold rounded-3 shadow-none d-flex align-items-center justify-content-center gap-2">
+                    <i class="fa-solid fa-shield-check"></i> Complete Admin Registration
+                </button>
+                {% else %}
                 <button type="submit"
                     class="btn btn-primary w-100 py-2.5 fw-bold rounded-3 shadow-none d-flex align-items-center justify-content-center gap-2">
-                    <i class="fa-solid fa-user-check"></i> Complete Verification & Register
+                    <i class="fa-solid fa-user-plus"></i> Complete User Registration
                 </button>
+                {% endif %}
             </form>
 
         </div>

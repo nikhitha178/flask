@@ -1,161 +1,76 @@
-{% extends "base.html" %}
-
+{% extends 'base_admin.html' %}
+{% block title %}Master Corporate Product Inventory Matrix Table View{% endblock %}
 {% block content %}
-
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <title>All Products - SmartCart</title>
-
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f4f6f9;
-            margin: 0;
-        }
-
-        .navbar {
-            background: linear-gradient(90deg, #1f1f1f, #3a3a3a);
-            color: white;
-            padding: 18px;
-            text-align: center;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .container {
-            width: 90%;
-            margin: 30px auto;
-        }
-
-        .top-bar {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-
-        .add-btn {
-            padding: 10px 15px;
-            background: #28a745;
-            color: white;
-            text-decoration: none;
-            border-radius: 6px;
-            font-size: 14px;
-            transition: 0.3s;
-        }
-
-        .add-btn:hover {
-            background: #218838;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background: white;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        th,
-        td {
-            padding: 12px;
-            text-align: center;
-            border-bottom: 1px solid #ddd;
-        }
-
-        th {
-            background: #333;
-            color: white;
-        }
-
-        tr:hover {
-            background: #f1f1f1;
-        }
-
-        img {
-            width: 70px;
-            height: 70px;
-            object-fit: cover;
-            border-radius: 6px;
-        }
-
-        .view-btn {
-            padding: 6px 10px;
-            background: #007bff;
-            color: white;
-            text-decoration: none;
-            border-radius: 4px;
-            font-size: 13px;
-            transition: 0.3s;
-        }
-
-        .view-btn:hover {
-            background: #0056b3;
-        }
-
-        .flash {
-            text-align: center;
-            padding: 10px;
-            margin: 15px auto;
-            width: 50%;
-            border-radius: 6px;
-            background: #f8d7da;
-            color: #721c24;
-        }
-    </style>
-</head>
-
-<body>
-
-    <div class="navbar">
-        <h2>Product List</h2>
-    </div>
-
-    <!-- Flash Messages -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% for category, message in messages %}
-    <div class="flash">{{ message }}</div>
-    {% endfor %}
-    {% endwith %}
-
-    <div class="container">
-
-        <div class="top-bar">
-            <a href="/admin/add-item" class="add-btn">+ Add New Product</a>
+<div class="card border-0 shadow-sm rounded-3">
+    <div class="card-header bg-white py-3 border-0">
+        <div class="row g-3 align-items-center justify-content-between">
+            <div class="col-md-4">
+                <h5 class="mb-0 fw-bold text-dark"><i class="fa-solid fa-table-list text-primary me-2"></i>Warehouse Inventory Database Ledger</h5>
+            </div>
+            <div class="col-md-7">
+                <form action="/admin/item-list" method="GET" class="row g-2 justify-content-md-end">
+                    <div class="col-sm-5">
+                        <input type="text" name="search" class="form-control form-control-sm" placeholder="Search string pattern..." value="{{ request.args.get('search','') }}">
+                    </div>
+                    <div class="col-sm-4">
+                        <select name="category" class="form-select form-select-sm">
+                            <option value="">All Category Filters</option>
+                            {% for cat in categories %}
+                            <option value="{{ cat.category }}" {% if request.args.get('category') == cat.category %}selected{% endif %}>{{ cat.category }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-sm-3">
+                        <button type="submit" class="btn btn-sm btn-dark w-100"><i class="fa-solid fa-filter me-1"></i>Apply Filters</button>
+                    </div>
+                </form>
+            </div>
         </div>
-
-        <table>
-            <tr>
-                <th>ID</th>
-                <th>Image</th>
-                <th>Name</th>
-                <th>Category</th>
-                <th>Price</th>
-                <th>View</th>
-            </tr>
-
-            {% for product in products %}
-            <tr>
-                <td>{{ product.product_id }}</td>
-
-                <td>
-                    <img src="{{ url_for('static', filename='uploads/product_image/' + product.image) }}">
-                </td>
-
-                <td>{{ product.name }}</td>
-                <td>{{ product.category }}</td>
-                <td>₹{{ product.price }}</td>
-
-                <td>
-                    <a href="/admin/view-item/{{ product.product_id }}" class="view-btn">View</a>
-                </td>
-            </tr>
-            {% endfor %}
-        </table>
-
     </div>
 
-</body>
-
-</html>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0 border-top">
+            <thead class="table-light text-uppercase fs-7 tracking-wider text-muted">
+                <tr>
+                    <th class="ps-4" style="width: 80px;">ID Vector</th>
+                    <th style="width: 100px;">Asset View</th>
+                    <th>Product Title & Structural Specifications Matrix</th>
+                    <th>Category</th>
+                    <th>Retail Price</th>
+                    <th class="text-end pe-4" style="width: 240px;">Operations Console Pipelines</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in products %}
+                <tr>
+                    <td class="ps-4 fw-mono text-secondary">#{{ item.product_id }}</td>
+                    <td>
+                        <img src="{{ url_for('static', filename='uploads/product_image/' + item.image) }}" class="rounded shadow-sm border" style="width: 50px; height: 50px; object-fit: cover;">
+                    </td>
+                    <td>
+                        <div class="fw-bold text-dark mb-0">{{ item.name }}</div>
+                        <span class="text-muted d-inline-block text-truncate small" style="max-width: 320px;">{{ item.description }}</span>
+                    </td>
+                    <td><span class="badge bg-light text-dark border px-2 py-1.5">{{ item.category }}</span></td>
+                    <td class="fw-bold text-dark">₹{{ "{:,.2f}".format(item.price) }}</td>
+                    <td class="text-end pe-4">
+                        <div class="btn-group gap-1">
+                            <a href="/admin/view-item/{{ item.product_id }}" class="btn btn-sm btn-light border" title="Inspect Complete Structural Asset Details"><i class="fa-regular fa-eye text-muted"></i></a>
+                            <a href="/admin/update-item/{{ item.product_id }}" class="btn btn-sm btn-outline-primary" title="Modify Internal Configuration Metrics Parameter Fields"><i class="fa-regular fa-pen-to-square"></i></a>
+                            <a href="/admin/delete-item/{{ item.product_id }}" onclick="return confirm('Confirm root asset terminal erasure protocols? Changes are irreversible.');" class="btn btn-sm btn-outline-danger" title="Purge Record Completely From Node Storage"><i class="fa-regular fa-trash-can"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6" class="text-center py-5 text-muted">
+                        <i class="fa-solid fa-box-open fs-2 mb-2 d-block text-black-50"></i>
+                        No live items currently align with chosen lookup configurations.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}

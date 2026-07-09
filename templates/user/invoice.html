@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>SmartCart Invoice - {{ order.order_id }}</title>
+    <style>
+        @page {
+            size: a4 portrait;
+            margin: 15mm 15mm;
+        }
+
+        body {
+            font-family: Helvetica, Arial, sans-serif;
+            color: #1f2937;
+            font-size: 10pt;
+            line-height: 1.4;
+        }
+
+        .invoice-box {
+            width: 100%;
+        }
+
+        .header-table {
+            width: 100%;
+            margin-bottom: 25px;
+        }
+
+        .brand-title {
+            font-size: 22pt;
+            font-weight: bold;
+            color: #2563eb;
+        }
+
+        .invoice-title {
+            font-size: 18pt;
+            text-align: right;
+            text-transform: uppercase;
+            color: #4b5563;
+        }
+
+        .details-box {
+            background-color: #f9fafb;
+            padding: 12px;
+            margin-bottom: 25px;
+            border-left: 3px solid #3b82f6;
+        }
+
+        .ledger-table {
+            width: 100%;
+            margin-top: 15px;
+            border-collapse: collapse;
+        }
+
+        .ledger-table th {
+            background-color: #f3f4f6;
+            font-weight: bold;
+            padding: 8px;
+            border: 1px solid #e5e7eb;
+            font-size: 9pt;
+            text-transform: uppercase;
+        }
+
+        .ledger-table td {
+            border: 1px solid #e5e7eb;
+            padding: 8px;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="invoice-box">
+        <table class="header-table">
+            <tr>
+                <td>
+                    <div class="brand-title">SmartCart</div>
+                    <div style="font-size: 8pt; color: #6b7280;">Secure E-Commerce Marketplace Hub</div>
+                </td>
+                <td class="invoice-title">Tax Invoice</td>
+            </tr>
+        </table>
+
+        <div class="details-box">
+            <table style="width: 100%;">
+                <tr>
+                    <td>
+                        <strong>Order ID:</strong> #{{ order.order_id }}<br>
+                        <strong>Date & Time:</strong> {{ order.created_at }}
+                    </td>
+                    <td class="text-right">
+                        <strong>Customer Account Ref:</strong> USR-{{ order.user_id }}
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <h3>Purchased Item Ledger</h3>
+        <table class="ledger-table">
+            <thead>
+                <tr>
+                    <th style="width: 60%;">Product Name</th>
+                    <th style="width: 15%;" class="text-center">Qty</th>
+                    <th style="width: 25%;" class="text-right">Price (₹)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for it in items %}
+                <tr>
+                    <td><strong>{{ it.product_name }}</strong></td>
+                    <td class="text-center">{{ it.quantity }}</td>
+                    <td class="text-right">₹{{ "{:,.2f}".format(it.price) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <table style="width: 100%; margin-top: 20px;">
+            <tr>
+                <td style="width: 60%;">
+                    <p style="font-size: 7.5pt; color: #9ca3af; margin: 0;">This is a computer-generated document
+                        requiring no physical signature validation.</p>
+                </td>
+                <td style="width: 40%;" class="text-right">
+                    <h3 style="color: #111827; margin: 0;">Grand Total: ₹{{ "{:,.2f}".format(order.amount) }}</h3>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+</body>
+
+</html>

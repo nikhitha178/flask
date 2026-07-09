@@ -1,43 +1,62 @@
-{% extends "base.html" %}
-
-{% block title %}User Home{% endblock %}
+{% extends 'base_user.html' %}
+{% block title %}Create Customer Account{% endblock %}
 
 {% block content %}
-<!DOCTYPE html>
-<html>
+<div class="row justify-content-center align-items-center w-100 m-0 py-4">
+    <div class="col-12 col-md-6 col-lg-5 px-0">
+        <div class="card border-0 shadow-sm rounded-4 bg-white p-4 p-md-5">
 
-<head>
-    <title>User Registration</title>
-</head>
+            <div class="text-center mb-4">
+                <div class="bg-primary-subtle text-primary d-inline-flex p-3 rounded-circle fs-3 mb-2">
+                    <i class="fa-solid fa-user-plus"></i>
+                </div>
+                <h3 class="fw-extrabold text-dark m-0">User Registration</h3>
+                <p class="text-muted small mt-1">Sign up to buy products and manage historical orders.</p>
+            </div>
 
-<body>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for cat, msg in messages %}
+            <div class="alert alert-{{ cat }} small rounded-3 border-0 py-2.5 px-3 mb-3" role="alert">
+                {{ msg }}
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
 
-    <h2>User Registration</h2>
+            <form action="/user-register" method="POST">
+                <div class="mb-3">
+                    <label for="name" class="form-label font-semibold small text-secondary">Full Name</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0 text-muted px-3"><i
+                                class="fa-solid fa-signature"></i></span>
+                        <input type="text" name="name" id="name" class="form-control bg-light border-start-0 py-2.5"
+                            placeholder="John Doe" required>
+                    </div>
+                </div>
 
-    <!-- Flash messages -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% for category, message in messages %}
-    <p style="color:red;">{{ message }}</p>
-    {% endfor %}
-    {% endwith %}
+                <div class="mb-4">
+                    <label for="email" class="form-label font-semibold small text-secondary">Email Address</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0 text-muted px-3"><i
+                                class="fa-solid fa-envelope"></i></span>
+                        <input type="email" name="email" id="email" class="form-control bg-light border-start-0 py-2.5"
+                            placeholder="name@domain.com" required>
+                    </div>
+                </div>
 
-    <form method="POST" action="/user-register">
+                <button type="submit"
+                    class="btn btn-primary w-100 py-2.5 fw-bold rounded-3 shadow-none d-flex align-items-center justify-content-center gap-2">
+                    Request Verification OTP <i class="fa-solid fa-arrow-right fs-6 ms-0.5"></i>
+                </button>
+            </form>
 
-        <label>Name:</label><br>
-        <input type="text" name="name" required><br><br>
+            <div class="text-center mt-4 pt-3 border-top border-light">
+                <span class="text-muted small">Already registered? <a href="/user-login"
+                        class="text-primary fw-bold text-decoration-none">Sign In</a></span>
+            </div>
 
-        <label>Email:</label><br>
-        <input type="email" name="email" required><br><br>
-
-        <label>Password:</label><br>
-        <input type="password" name="password" required><br><br>
-
-        <button type="submit">Register</button>
-    </form>
-
-    <br>
-    <a href="/user-login">Already have an account? Login</a>
-
-</body>
-
-</html>
+        </div>
+    </div>
+</div>
+{% endblock %}

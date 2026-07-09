@@ -1,25 +1,17 @@
-{% extends "base.html" %}
-
+{% extends 'base_user.html' %}
+{% block title %}Payment Capture Completed Interface Display Screen{% endblock %}
 {% block content %}
-<!-- Your page content -->
-
-<!DOCTYPE html>
-<html>
-
-<head>
-    <title>Payment Successful</title>
-</head>
-
-<body>
-
-    <h2 style="color:green;">Payment Successful!</h2>
-
-    <p>Payment ID: {{ payment_id }}</p>
-    <p>Order ID: {{ order_id }}</p>
-
-    <a href="/user/products">Continue Shopping</a>
-
-</body>
-
-</html>
+<div class="container text-center my-5 py-5">
+    <div class="card shadow border-0 p-5 rounded-3 max-width-md mx-auto bg-white">
+        <div class="text-success mb-4"><i class="fa-solid fa-circle-check fs-1"></i></div>
+        <h3 class="fw-bold text-dark mb-2">Electronic Payment Captured Cleanly</h3>
+        <p class="text-muted mb-4">Financial clearing verification structures have captured authorized values
+            successfully via integrated Razorpay secure API token nodes.</p>
+        <div class="d-flex justify-content-center gap-2">
+            <a href="/user/my-orders" class="btn btn-dark px-4 py-2 fw-semibold">Access Order Registry Invoices</a>
+            <a href="/user/products" class="btn btn-outline-secondary px-4 py-2">Return Back To Product Grid
+                Marketplace</a>
+        </div>
+    </div>
+</div>
 {% endblock %}

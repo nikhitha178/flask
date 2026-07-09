@@ -1,133 +1,63 @@
-{% extends "base.html" %}
+{% extends 'base_user.html' %}
+{% block title %}Admin Infrastructure Access Request{% endblock %}
 
 {% block content %}
-<!-- Your page content -->
+<div class="row justify-content-center align-items-center w-100 m-0 py-4">
+    <div class="col-12 col-md-6 col-lg-5 px-0">
+        <div class="card border-0 shadow-sm rounded-4 bg-white p-4 p-md-5 border-top border-warning border-3">
 
-<!DOCTYPE html>
-<html lang="en">
+            <div class="text-center mb-4">
+                <div class="bg-warning-subtle text-warning d-inline-flex p-3 rounded-circle fs-3 mb-2">
+                    <i class="fa-solid fa-user-shield"></i>
+                </div>
+                <h3 class="fw-extrabold text-dark m-0">Admin Console Sign Up</h3>
+                <p class="text-muted small mt-1">Register an administrative system node control token.</p>
+            </div>
 
-<head>
-    <meta charset="UTF-8">
-    <title>SmartCart - Admin Signup</title>
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f4f6f9;
-        }
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for cat, msg in messages %}
+            <div class="alert alert-{{ cat }} small rounded-3 border-0 py-2.5 px-3 mb-3" role="alert">
+                {{ msg }}
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
 
-        /* Navbar */
-        .navbar {
-            background: #2c3e50;
-            padding: 15px;
-            color: white;
-            display: flex;
-            justify-content: space-between;
-        }
+            <form action="/admin-signup" method="POST">
+                <div class="mb-3">
+                    <label for="name" class="form-label font-semibold small text-secondary">Administrator Name</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0 text-muted px-3"><i
+                                class="fa-solid fa-id-card-clip"></i></span>
+                        <input type="text" name="name" id="name" class="form-control bg-light border-start-0 py-2.5"
+                            placeholder="System Operator" required>
+                    </div>
+                </div>
 
-        .navbar h2 {
-            margin: 0;
-        }
+                <div class="mb-4">
+                    <label for="email" class="form-label font-semibold small text-secondary">Secure Operator
+                        Email</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0 text-muted px-3"><i
+                                class="fa-solid fa-shield-halved"></i></span>
+                        <input type="email" name="email" id="email" class="form-control bg-light border-start-0 py-2.5"
+                            placeholder="admin@smartcart.com" required>
+                    </div>
+                </div>
 
-        .navbar a {
-            color: white;
-            text-decoration: none;
-            margin-left: 15px;
-        }
+                <button type="submit"
+                    class="btn btn-warning text-dark w-100 py-2.5 fw-extrabold rounded-3 shadow-none d-flex align-items-center justify-content-center gap-2">
+                    Dispatch Admin OTP Code <i class="fa-solid fa-paper-plane-top fs-6 ms-0.5"></i>
+                </button>
+            </form>
 
-        /* Form Container */
-        .container {
-            width: 350px;
-            margin: 80px auto;
-            padding: 25px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-        }
+            <div class="text-center mt-4 pt-3 border-top border-light">
+                <span class="text-muted small">Access authorized? <a href="/admin-login"
+                        class="text-warning fw-bold text-decoration-none">Admin Sign In</a></span>
+            </div>
 
-        h3 {
-            text-align: center;
-        }
-
-        input {
-            width: 100%;
-            padding: 10px;
-            margin: 8px 0;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-
-        button {
-            width: 100%;
-            padding: 10px;
-            background: #27ae60;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background: #219150;
-        }
-
-        .msg {
-            color: red;
-            text-align: center;
-        }
-
-        .link {
-            text-align: center;
-            margin-top: 10px;
-        }
-
-        .link a {
-            text-decoration: none;
-            color: #2980b9;
-        }
-    </style>
-</head>
-
-<body>
-
-    <!-- Navbar -->
-    <div class="navbar">
-        <h2>SmartCart</h2>
-        <div>
-            <a href="/">Home</a>
-            <a href="/login">User Login</a>
-            <a href="/signup">User Signup</a>
         </div>
     </div>
-
-    <!-- Signup Form -->
-    <div class="container">
-        <h3>Admin Signup</h3>
-
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        {% for message in messages %}
-        <p class="msg">{{ message }}</p>
-        {% endfor %}
-        {% endif %}
-        {% endwith %}
-
-        <form method="POST" action="/admin-signup">
-            <label>Name:</label>
-            <input type="text" name="name" required>
-
-            <label>Email:</label>
-            <input type="email" name="email" required>
-
-            <button type="submit">Send OTP</button>
-        </form>
-
-        <div class="link">
-            <p>Already admin? <a href="/admin-login">Login here</a></p>
-        </div>
-    </div>
-
-</body>
-
-</html>
+</div>
 {% endblock %}

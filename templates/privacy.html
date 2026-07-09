@@ -1,0 +1,50 @@
+{% extends 'base_user.html' %}
+{% block title %}Privacy Parameters & Data Management{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center w-100 m-0">
+    <div class="col-12 col-xl-9 px-0">
+        <div class="card border-0 shadow-sm rounded-4 bg-white p-4 p-md-5">
+            <div class="d-flex align-items-center gap-3 border-bottom pb-3 mb-4">
+                <div class="bg-primary-subtle text-primary p-3 rounded-3 fs-4">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <div>
+                    <h2 class="fw-extrabold text-dark m-0">Privacy Parameters</h2>
+                    <p class="text-muted small m-0">Data compilation and platform operational privacy policies.</p>
+                </div>
+            </div>
+
+            <section class="mb-4">
+                <h5 class="fw-bold text-dark"><i class="fa-solid fa-user-check text-primary me-2"></i>1. Core Account
+                    Encryption</h5>
+                <p class="text-secondary small" style="line-height: 1.7;">
+                    Your account gateway parameters are protected via server-side session hashing protocols. SmartCart
+                    compiles minimum access parameters (`user_id`, `user_name`) purely to route catalog items and
+                    complete standard payment ledger receipts.
+                </p>
+            </section>
+
+            <section class="mb-4">
+                <h5 class="fw-bold text-dark"><i class="fa-solid fa-cookie-bite text-primary me-2"></i>2. Session & Cart
+                    Allocation Tracking</h5>
+                <p class="text-secondary small" style="line-height: 1.7;">
+                    Temporary active session cookies are leveraged strictly to track your active transactional
+                    allocations (e.g., your shopping cart snapshot arrays). These parameters expire automatically upon
+                    logging out of the User Console Terminal.
+                </p>
+            </section>
+
+            <section class="mb-0">
+                <h5 class="fw-bold text-dark"><i class="fa-solid fa-file-invoice text-primary me-2"></i>3. Document
+                    Generation Logging</h5>
+                <p class="text-secondary small" style="line-height: 1.7;">
+                    Invoice PDF documents generated via client requests match data fields securely mapped directly to
+                    our internal isolated database instances. No analytical tracking models are shared with external
+                    edge marketing nodes.
+                </p>
+            </section>
+        </div>
+    </div>
+</div>
+{% endblock %}

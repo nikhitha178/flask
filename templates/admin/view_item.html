@@ -1,106 +1,36 @@
-{% extends "base.html" %}
-
+{% extends 'base_admin.html' %}
+{% block title %}Complete Product Specifications Asset Inspection Layout Panel{% endblock %}
 {% block content %}
-<!-- Your page content -->
-
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <title>Product Details - SmartCart</title>
-
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #eef2f7, #d9e4f5);
-            margin: 0;
-        }
-
-        .navbar {
-            background: linear-gradient(90deg, #1f1f1f, #3a3a3a);
-            color: white;
-            padding: 18px;
-            text-align: center;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .container {
-            width: 500px;
-            margin: 50px auto;
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-
-        img {
-            width: 200px;
-            height: 200px;
-            object-fit: cover;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        h2 {
-            margin-bottom: 20px;
-        }
-
-        p {
-            font-size: 16px;
-            margin: 10px 0;
-            color: #333;
-        }
-
-        strong {
-            color: #000;
-        }
-
-        .price {
-            font-size: 20px;
-            font-weight: bold;
-            color: #28a745;
-        }
-
-        .back-btn {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 10px 20px;
-            background: #333;
-            color: white;
-            text-decoration: none;
-            border-radius: 6px;
-            transition: 0.3s;
-        }
-
-        .back-btn:hover {
-            background: #111;
-        }
-    </style>
-</head>
-
-<body>
-
-    <div class="navbar">
-        <h2>Product Details</h2>
+<div class="card border-0 shadow-sm rounded-3 overflow-hidden">
+    <div class="row g-0">
+        <div class="col-md-5 bg-white d-flex align-items-center justify-content-center border-end p-4">
+            <img src="{{ url_for('static', filename='uploads/product_image/' + product.image) }}"
+                class="img-fluid rounded shadow-sm" style="max-height: 380px; object-fit: contain;"
+                alt="{{ product.name }}">
+        </div>
+        <div class="col-md-7 p-4 p-lg-5 d-flex flex-column justify-content-between">
+            <div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-2.5">
+                        <li class="breadcrumb-item small text-muted text-uppercase tracking-wider">Inventory Root</li>
+                        <li class="breadcrumb-item small text-muted text-uppercase tracking-wider active">{{
+                            product.category }}</li>
+                    </ol>
+                </nav>
+                <h2 class="fw-bold text-dark mb-2">{{ product.name }}</h2>
+                <div class="fs-3 fw-bold text-primary mb-4">₹{{ "{:,.2f}".format(product.price) }}</div>
+                <hr class="my-3">
+                <h6 class="fw-bold text-secondary text-uppercase tracking-wider small mb-2">Technical Specifications
+                    Sheet / Description</h6>
+                <p class="text-muted leading-relaxed" style="white-space: pre-line;">{{ product.description }}</p>
+            </div>
+            <div class="pt-4 border-top d-flex gap-2">
+                <a href="/admin/update-item/{{ product.product_id }}"
+                    class="btn btn-warning px-4 text-dark fw-semibold"><i
+                        class="fa-regular fa-pen-to-square me-2"></i>Modify Configurations Matrix</a>
+                <a href="/admin/item-list" class="btn btn-light border px-4">Return To General Ledger Table</a>
+            </div>
+        </div>
     </div>
-
-    <div class="container">
-
-        <img src="/static/uploads/product_image/{{ product.image }}">
-
-        <p><strong>Name:</strong> {{ product.name }}</p>
-        <p><strong>Description:</strong> {{ product.description }}</p>
-        <p><strong>Category:</strong> {{ product.category }}</p>
-        <p class="price">₹{{ product.price }}</p>
-
-        <a href="/admin/item-list" class="back-btn">← Back to List</a>
-
-    </div>
-
-</body>
-
-</html>
+</div>
 {% endblock %}

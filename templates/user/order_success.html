@@ -1,112 +1,84 @@
-{% extends "base.html" %}
-
+{% extends 'base_user.html' %}
+{% block title %}Transaction Processed Successfully - Invoice Printout{% endblock %}
 {% block content %}
-<!-- Your page content -->
+<div class="row justify-content-center">
+    <div class="col-lg-9">
+        <div class="card border-0 shadow rounded-3 overflow-hidden bg-white">
+            <div class="bg-success text-white text-center p-5">
+                <div class="bg-white text-success rounded-circle d-inline-flex align-items-center justify-content-center shadow mb-3"
+                    style="width: 70px; height: 70px;">
+                    <i class="fa-solid fa-check fs-1"></i>
+                </div>
+                <h3 class="fw-bold mb-1 text-white">Settlement Successfully Logged</h3>
+                <p class="mb-0 opacity-75 small">Your processing token transaction cleared financial node arrays
+                    completely. Review final invoice metadata parameters below.</p>
+            </div>
 
-<!DOCTYPE html>
-<html>
+            <div class="card-body p-4 p-lg-5">
+                <div class="row g-3 mb-4">
+                    <div class="col-sm-6">
+                        <span class="text-muted text-uppercase fs-7 tracking-wider d-block">System Internal Tracking Key
+                            ID</span>
+                        <strong class="text-dark font-mono">#ORD-{{ order.order_id }}</strong>
+                    </div>
+                    <div class="col-sm-6 text-sm-end">
+                        <span class="text-muted text-uppercase fs-7 tracking-wider d-block">Razorpay Wire Reference
+                            Code</span>
+                        <strong class="text-dark font-mono small">{{ order.razorpay_payment_id }}</strong>
+                    </div>
+                </div>
 
-<head>
-    <title>Order Successful</title>
-    <style>
-        .success-container {
-            width: 60%;
-            margin: auto;
-            padding: 20px;
-            text-align: center;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            margin-top: 40px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
+                <h5 class="fw-bold text-dark border-bottom pb-2 mb-3">Itemized Settlement Breakdown Ledger Allocation
+                </h5>
+                <div class="table-responsive mb-4">
+                    <table class="table align-middle">
+                        <thead class="table-light text-muted small text-uppercase fw-bold">
+                            <tr>
+                                <th>Product Specifications Identity Title</th>
+                                <th class="text-center" style="width: 100px;">Quantity Scale</th>
+                                <th class="text-end" style="width: 140px;">Unit Price Valuation</th>
+                                <th class="text-end pe-3" style="width: 160px;">Total Row Yield</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in items %}
+                            <tr>
+                                <td class="fw-bold text-dark">{{ item.product_name }}</td>
+                                <td class="text-center font-mono text-secondary">{{ item.quantity }}</td>
+                                <td class="text-end font-mono text-dark">₹{{ "{:,.2f}".format(item.price) }}</td>
+                                <td class="text-end font-mono fw-bold text-dark pe-3">₹{{ "{:,.2f}".format(item.price *
+                                    item.quantity) }}</td>
+                            </tr>
+                            {% endfor %}
+                            <tr class="table-light">
+                                <td colspan="3" class="text-end fw-bold text-dark pe-3 py-3">Gross Settlements Total
+                                    Amount Cleared:</td>
+                                <td class="text-end font-mono text-primary fw-black fs-5 pe-3 py-3">₹{{
+                                    "{:,.2f}".format(order.amount) }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
-        .success-container h2 {
-            color: green;
-        }
+                <div
+                    class="alert alert-secondary border-0 p-3 bg-light rounded-3 d-flex align-items-start gap-2.5 mb-4">
+                    <i class="fa-solid fa-circle-info text-secondary mt-0.5 fs-5"></i>
+                    <div class="small text-muted leading-relaxed">This acts as formal authentication that cryptographic
+                        ledger assets mapped cleanly under personal identity parameters. No supplementary confirmation
+                        actions or configuration tokens are required.</div>
+                </div>
 
-        .order-details {
-            text-align: left;
-            margin-top: 20px;
-            line-height: 1.6;
-        }
-
-        .items-list {
-            margin-top: 20px;
-        }
-
-        .items-list table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .items-list table,
-        th,
-        td {
-            border: 1px solid #ccc;
-        }
-
-        th,
-        td {
-            padding: 10px;
-        }
-
-        .btn {
-            padding: 10px 15px;
-            background-color: #0077ff;
-            color: #fff;
-            border-radius: 5px;
-            text-decoration: none;
-            margin-right: 10px;
-        }
-
-        .btn:hover {
-            background-color: #005fcc;
-        }
-    </style>
-</head>
-
-<body>
-
-    <div class="success-container">
-
-        <h2>🎉 Your Order is Confirmed!</h2>
-        <p>Thank you for shopping with <strong>SmartCart</strong>.</p>
-
-        <div class="order-details">
-            <p><strong>Order ID:</strong> {{ order.order_id }}</p>
-            <p><strong>Payment ID:</strong> {{ order.razorpay_payment_id }}</p>
-            <p><strong>Amount Paid:</strong> ₹{{ order.amount }}</p>
-            <p><strong>Order Date:</strong> {{ order.created_at }}</p>
+                <div class="text-center pt-3 border-top d-flex gap-2 justify-content-center">
+                    <a href="/user/products" class="btn btn-primary px-4 py-2 fw-semibold">Continue Shop Portal
+                        Operations</a>
+                    <a href="/user/my-orders" class="btn btn-light border px-4 py-2">Inspect Complete Invoice
+                        Repositories</a>
+                </div>
+                <a href="/user/download-invoice/{{ order.order_id }}" class="btn btn-warning fw-bold text-dark">
+                    <i class="fa-solid fa-download me-1.5"></i>Get PDF Invoice
+                </a>
+            </div>
         </div>
-
-        <div class="items-list">
-            <h3>Order Summary</h3>
-
-            <table>
-                <tr>
-                    <th>Product</th>
-                    <th>Qty</th>
-                    <th>Price (₹)</th>
-                </tr>
-
-                {% for it in items %}
-                <tr>
-                    <td>{{ it.product_name }}</td>
-                    <td>{{ it.quantity }}</td>
-                    <td>{{ it.price }}</td>
-                </tr>
-                {% endfor %}
-            </table>
-        </div>
-
-        <br>
-
-        <a href="/user/products" class="btn">Continue Shopping</a>
-        <a href="/user/my-orders" class="btn">View My Orders</a>
-
     </div>
-
-</body>
-
-</html>
+</div>
 {% endblock %}
