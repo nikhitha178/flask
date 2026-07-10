@@ -13,10 +13,25 @@
                 <p class="text-muted small mb-4">Please provide a valid physical address matrix allocation where
                     logistics units can deliver your items.</p>
 
+
+
                 <form action="/user/checkout/process" method="POST" class="needs-validation" novalidate>
 
+                    <!-- 🟢 ADD THIS LINE: Pass direct single product tracking variables cleanly into checkout processing -->
+                    <input type="hidden" name="product_id" value="{{ request.args.get('product_id', '') }}">
+
                     <div class="mb-3">
-                        <label for="fullName" class="form-label small fw-bold text-dark">Full Name (Recipient)</label>
+                        <label for="fullName" class="form-label small fw-bold text-dark">Full Name
+                            (Recipient)</label>
+                        <input type="text" class="form-control rounded-3" id="fullName" name="full_name"
+                            placeholder="John Doe" required>
+                    </div>
+
+                    <!-- ... Keep your phone, address fields, and submit button exactly the same ... -->
+
+                    <div class="mb-3">
+                        <label for="fullName" class="form-label small fw-bold text-dark">Full Name
+                            (Recipient)</label>
                         <input type="text" class="form-control rounded-3" id="fullName" name="full_name"
                             placeholder="John Doe" required>
                     </div>
@@ -89,4 +104,25 @@
 
     </div>
 </div>
+<!-- Bootstrap Client-Side Validation Script Block -->
+<script>
+    (() => {
+        'use strict'
+
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        const forms = document.querySelectorAll('.needs-validation')
+
+        // Loop over them and prevent submission on invalid inputs
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+
+                form.classList.add('was-validated')
+            }, false)
+        })
+    })()
+</script>
 {% endblock %}

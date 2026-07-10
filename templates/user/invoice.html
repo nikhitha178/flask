@@ -41,7 +41,7 @@
 
         .details-box {
             background-color: #f9fafb;
-            padding: 12px;
+            padding: 15px;
             margin-bottom: 25px;
             border-left: 3px solid #3b82f6;
         }
@@ -73,6 +73,13 @@
         .text-center {
             text-align: center;
         }
+
+        .address-text {
+            font-size: 9pt;
+            color: #4b5563;
+            line-height: 1.3;
+            margin-top: 4px;
+        }
     </style>
 </head>
 
@@ -84,20 +91,38 @@
                 <td>
                     <div class="brand-title">SmartCart</div>
                     <div style="font-size: 8pt; color: #6b7280;">Secure E-Commerce Marketplace Hub</div>
+                    <div class="address-text" style="margin-top: 8px;">
+                        <strong>SmartCart E-Commerce Systems Ltd.</strong><br>
+                        Logistics Fulfillment Hub Node 4<br>
+                        Hyderabad, Telangana, India
+                    </div>
                 </td>
-                <td class="invoice-title">Tax Invoice</td>
+                <td class="invoice-title" style="vertical-align: top;">Tax Invoice</td>
             </tr>
         </table>
 
         <div class="details-box">
-            <table style="width: 100%;">
+            <table style="width: 100%; border-collapse: collapse;">
                 <tr>
-                    <td>
+                    <td style="width: 50%; vertical-align: top;">
+                        <span
+                            style="font-size: 8pt; text-transform: uppercase; color: #6b7280; font-weight: bold; display: block; margin-bottom: 4px;">Order
+                            References</span>
                         <strong>Order ID:</strong> #{{ order.order_id }}<br>
-                        <strong>Date & Time:</strong> {{ order.created_at }}
+                        <strong>Date & Time:</strong> {{ order.created_at }}<br>
+                        <strong>Customer Ref:</strong> USR-{{ order.user_id }}
                     </td>
-                    <td class="text-right">
-                        <strong>Customer Account Ref:</strong> USR-{{ order.user_id }}
+                    <td class="text-right" style="width: 50%; vertical-align: top;">
+                        <span
+                            style="font-size: 8pt; text-transform: uppercase; color: #6b7280; font-weight: bold; display: block; margin-bottom: 4px;">Ship
+                            To / Consignee</span>
+                        <strong>{{ order.recipient_name }}</strong>
+                        <div class="address-text" style="text-align: right;">
+                            {{ order.address_line_1 }}<br>
+                            {% if order.address_line_2 %}{{ order.address_line_2 }}<br>{% endif %}
+                            {{ order.city }}, {{ order.state }} - {{ order.pin_code }}<br>
+                            <strong>Contact:</strong> {{ order.phone_number }}
+                        </div>
                     </td>
                 </tr>
             </table>
@@ -123,14 +148,17 @@
             </tbody>
         </table>
 
-        <table style="width: 100%; margin-top: 20px;">
+        <table style="width: 100%; margin-top: 25px; border-collapse: collapse;">
             <tr>
-                <td style="width: 60%;">
-                    <p style="font-size: 7.5pt; color: #9ca3af; margin: 0;">This is a computer-generated document
-                        requiring no physical signature validation.</p>
+                <td style="width: 50%; vertical-align: middle;">
+                    <p style="font-size: 7.5pt; color: #9ca3af; margin: 0; line-height: 1.2;">
+                        This is a secure computer-generated business document mapping cryptographic clearance
+                        records.<br>No physical signature validation parameters are required.
+                    </p>
                 </td>
-                <td style="width: 40%;" class="text-right">
-                    <h3 style="color: #111827; margin: 0;">Grand Total: ₹{{ "{:,.2f}".format(order.amount) }}</h3>
+                <td style="width: 50%;" class="text-right">
+                    <h3 style="color: #111827; margin: 0; font-size: 15pt;">Grand Total: ₹{{
+                        "{:,.2f}".format(order.amount) }}</h3>
                 </td>
             </tr>
         </table>

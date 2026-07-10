@@ -28,6 +28,24 @@
                     </div>
                 </div>
 
+                <div class="card bg-light border-0 rounded-3 p-4 mb-4 shadow-sm text-start">
+                    <h6 class="fw-bold text-dark border-bottom pb-2 mb-2">
+                        <i class="fa-solid fa-location-dot text-primary me-2"></i>Shipping Destination Address Node
+                    </h6>
+                    <div class="small text-muted leading-relaxed">
+                        <p class="mb-1 text-dark fw-bold fs-6">{{ order.recipient_name }}</p>
+                        <p class="mb-1">{{ order.address_line_1 }}</p>
+                        {% if order.address_line_2 %}
+                        <p class="mb-1">{{ order.address_line_2 }}</p>
+                        {% endif %}
+                        <p class="mb-1">{{ order.city }}, {{ order.state }} - <span class="font-mono fw-bold">{{
+                                order.pin_code }}</span></p>
+                        <p class="mb-0 mt-2 text-dark fw-semibold">
+                            <i class="fa-solid fa-phone text-secondary small me-1"></i> Contact Phone: {{
+                            order.phone_number }}
+                        </p>
+                    </div>
+                </div>
                 <h5 class="fw-bold text-dark border-bottom pb-2 mb-3">Itemized Settlement Breakdown Ledger Allocation
                 </h5>
                 <div class="table-responsive mb-4">
@@ -68,15 +86,16 @@
                         actions or configuration tokens are required.</div>
                 </div>
 
-                <div class="text-center pt-3 border-top d-flex gap-2 justify-content-center">
+                <div class="text-center pt-3 border-top d-flex gap-2 justify-content-center align-items-center">
                     <a href="/user/products" class="btn btn-primary px-4 py-2 fw-semibold">Continue Shop Portal
                         Operations</a>
                     <a href="/user/my-orders" class="btn btn-light border px-4 py-2">Inspect Complete Invoice
                         Repositories</a>
+                    <a href="/user/download-invoice/{{ order.order_id }}"
+                        class="btn btn-warning fw-bold text-dark py-2 px-3">
+                        <i class="fa-solid fa-download me-1.5"></i>Get PDF Invoice
+                    </a>
                 </div>
-                <a href="/user/download-invoice/{{ order.order_id }}" class="btn btn-warning fw-bold text-dark">
-                    <i class="fa-solid fa-download me-1.5"></i>Get PDF Invoice
-                </a>
             </div>
         </div>
     </div>
