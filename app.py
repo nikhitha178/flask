@@ -5,6 +5,7 @@ import config
 import bcrypt
 import random
 import os
+import sqlite3
 from werkzeug.utils import secure_filename
 from flask_mail import Mail, Message
 from flask import request, jsonify, render_template
@@ -19,6 +20,16 @@ razorpay_client = razorpay.Client(
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
+
+
+def get_db_connection():
+    base_dir = os.path.abspath(os.path.dirname(__file__))
+    db_path = os.path.join(base_dir, 'database.db')
+
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row
+    return conn
+
 
 app.config['MAIL_SERVER'] = config.mail_server
 app.config['MAIL_PORT'] = config.mail_port
